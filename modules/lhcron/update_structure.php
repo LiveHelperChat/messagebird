@@ -1,6 +1,6 @@
 <?php 
 /**
- * php cron.php -s site_admin -e cloudtalkio -c cron/update_structure
+ * php cron.php -s site_admin -e messagebird -c cron/update_structure
  * */
 
 $contentData = file_get_contents('extension/messagebird/doc/structure.json');

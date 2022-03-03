@@ -24,7 +24,7 @@ $rowsNumber = null;
 $filterWithoutSort = $filterParams['filter'];
 unset($filterWithoutSort['sort']);
 
-if (empty($filterWithoutSort)) {
+if (empty($filterWithoutSort) && method_exists('\LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage','estimateRows')) {
     $rowsNumber = ($rowsNumber = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::estimateRows()) && $rowsNumber > 10000 ? $rowsNumber : null;
 }
 
