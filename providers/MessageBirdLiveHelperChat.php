@@ -110,15 +110,27 @@ namespace LiveHelperChatExtension\messagebird\providers {
                 ])
             ];
 
-            $response = $this->getRestAPI($requestParams);
+            $response = null;
 
-            // Responder
-            if (isset($response['id'])) {
-                $item->mb_id_message = $response['id'];
+            try {
+
+                $response = $this->getRestAPI($requestParams);
+
+                // Responder
+                if (isset($response['id'])) {
+                    $item->mb_id_message = $response['id'];
+                } else {
+                    throw new \Exception('Message ID was not returned.');
+                }
+
+                $item->send_status_raw = json_encode($response);
+                $item->saveThis();
+
+            } catch (\Exception $e) {
+                $item->send_status_raw = json_encode($response) . $e->getTraceAsString() . $e->getMessage();
+                $item->status = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_FAILED;
+                $item->saveThis();
             }
-
-            $item->send_status_raw = json_encode($response);
-            $item->saveThis();
         }
 
         public function getRestAPI($params)

@@ -20,7 +20,39 @@
       <translation type="unfinished"/>
     </message>
     <message>
+      <source>Send a mass message</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
       <source>Messages</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Imported</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Department</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Template</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Choose a template</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>First row in CSV is skipped. Columns order</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Import and start sending</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Select department</source>
       <translation type="unfinished"/>
     </message>
     <message>
@@ -29,10 +61,6 @@
     </message>
     <message>
       <source>ID</source>
-      <translation type="unfinished"/>
-    </message>
-    <message>
-      <source>Department</source>
       <translation type="unfinished"/>
     </message>
     <message>
@@ -76,6 +104,14 @@
       <translation type="unfinished"/>
     </message>
     <message>
+      <source>Processed. Pending callback.</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Failed</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
       <source>Pending to be processed</source>
       <translation type="unfinished"/>
     </message>
@@ -104,19 +140,11 @@
       <translation type="unfinished"/>
     </message>
     <message>
-      <source>Template</source>
-      <translation type="unfinished"/>
-    </message>
-    <message>
       <source>Send a test message</source>
       <translation type="unfinished"/>
     </message>
     <message>
       <source>Updated</source>
-      <translation type="unfinished"/>
-    </message>
-    <message>
-      <source>Select department</source>
       <translation type="unfinished"/>
     </message>
     <message>
@@ -152,15 +180,27 @@
       <translation type="unfinished"/>
     </message>
     <message>
-      <source>Please enter a phone</source>
-      <translation type="unfinished"/>
-    </message>
-    <message>
       <source>Please choose a department!</source>
       <translation type="unfinished"/>
     </message>
     <message>
       <source>Please choose a template!</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Expected columns does not match!</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Invalid file format</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Mass message</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Please enter a phone</source>
       <translation type="unfinished"/>
     </message>
     <message>

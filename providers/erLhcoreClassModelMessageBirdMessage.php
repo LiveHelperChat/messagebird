@@ -102,6 +102,7 @@ class erLhcoreClassModelMessageBirdMessage
     const STATUS_READ = 3;
     const STATUS_PENDING_PROCESS = 4;
     const STATUS_IN_PROCESS = 5;
+    const STATUS_FAILED = 6;
 
     const INIT_US = 0;
     const INIT_THIRD_PARTY = 1;

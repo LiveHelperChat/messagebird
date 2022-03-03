@@ -42,7 +42,15 @@
                     <?php elseif ($item->status == \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_DELIVERED) : ?>
                         <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Delivered');?>
                     <?php elseif ($item->status == \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_IN_PROCESS) : ?>
-                        <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','In process');?>
+
+                        <?php if ($item->mb_id_message == '') : ?>
+                            <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','In process');?>
+                        <?php else : ?>
+                            <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Processed. Pending callback.');?>
+                        <?php endif; ?>
+
+                    <?php elseif ($item->status == \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_FAILED) : ?>
+                        <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Failed');?>
                     <?php elseif ($item->status == \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_PENDING_PROCESS) : ?>
                         <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Pending to be processed');?>
                     <?php elseif ($item->status == \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_SENT) : ?>

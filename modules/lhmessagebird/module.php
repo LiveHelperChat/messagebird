@@ -40,6 +40,12 @@ $ViewList['send'] = array(
     'functions' => array('use_admin'),
 );
 
+$ViewList['massmessage'] = array(
+    'params' => array(),
+    'uparams' => array(),
+    'functions' => array('use_admin'),
+);
+
 $ViewList['rendersend'] = array(
     'params' => array('template'),
     'uparams' => array(),
