@@ -74,6 +74,7 @@ class erLhcoreClassExtensionMessagebird
                 $messageBird->initiation = LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::INIT_THIRD_PARTY;
                 $messageBird->dep_id = $params['webhook']->dep_id;
                 $messageBird->message = $params['data']['message']['content']['hsm']['templateName'];
+                $messageBird->user_id = -1;
             }
 
             $statusMap = [
