@@ -68,8 +68,8 @@ class erLhcoreClassExtensionMessagebird
 
             if (!is_object($messageBird)) {
                 $messageBird = new LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage();
-                $messageBird->template = $params['data']['message']['content']['templateName'];
-                $messageBird->language = $params['data']['message']['content']['language']['code'];
+                $messageBird->template = $params['data']['message']['content']['hsm']['templateName'];
+                $messageBird->language = $params['data']['message']['content']['hsm']['language']['code'];
                 $messageBird->phone = str_replace('+','',$params['data']['message']['to']);
                 $messageBird->initiation = LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::INIT_THIRD_PARTY;
                 $messageBird->dep_id = $params['webhook']->dep_id;
