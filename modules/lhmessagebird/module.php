@@ -14,7 +14,7 @@ $ViewList['index'] = array(
 $ViewList['settings'] = array(
     'params' => array(),
     'uparams' => array(),
-    'functions' => array('use_admin'),
+    'functions' => array('configure'),
 );
 
 $ViewList['messages'] = array(
@@ -59,3 +59,4 @@ $ViewList['templates'] = array(
 );
 
 $FunctionList['use_admin'] = array('explain' => 'Allow operator to use MessageBird');
+$FunctionList['configure'] = array('explain' => 'Allow operator to configure MessageBird');
