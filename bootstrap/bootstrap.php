@@ -32,7 +32,7 @@ class erLhcoreClassExtensionMessagebird
             if (is_object($messageBird) && $messageBird->dep_id > 0) {
                 // Chat
                 $params['chat']->dep_id = $messageBird->dep_id;
-                $params['chat']->updateThis(['update' => ['chat_id']]);
+                $params['chat']->updateThis(['update' => ['dep_id']]);
 
                 // Save template message first before saving initial response in the lhc core
                 $msg = new erLhcoreClassModelmsg();
