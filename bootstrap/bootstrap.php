@@ -73,6 +73,7 @@ class erLhcoreClassExtensionMessagebird
                 $messageBird->phone = str_replace('+','',$params['data']['message']['to']);
                 $messageBird->initiation = LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::INIT_THIRD_PARTY;
                 $messageBird->dep_id = $params['webhook']->dep_id;
+                $messageBird->message = $params['data']['message']['content']['hsm']['templateName'];
             }
 
             $statusMap = [
