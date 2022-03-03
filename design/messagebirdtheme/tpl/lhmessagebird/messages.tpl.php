@@ -13,6 +13,7 @@
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Send status');?></th>
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Chat ID');?></th>
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Initiator');?></th>
+            <th width="1%"></th>
         </tr>
         </thead>
         <?php foreach ($items as $item) : ?>
@@ -24,7 +25,11 @@
                     <?php echo htmlspecialchars((string)$item->department)?>
                 </td>
                 <td>
-                    <?php echo htmlspecialchars((string)$item->user)?>
+                    <?php if ($item->user_id > 0) : ?>
+                        <?php echo htmlspecialchars((string)$item->user)?>
+                    <?php elseif ($item->user_id == -1) : ?>
+                        <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','System');?>
+                    <?php endif; ?>
                 </td>
                 <td>
                     <?php echo htmlspecialchars((string)$item->phone)?>
@@ -52,10 +57,13 @@
                 </td>
                 <td>
                     <?php if ($item->initiation == \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::INIT_US) : ?>
-                    We
+                        <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','We');?>
                     <?php else : ?>
-                    Third party
+                        <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Third party');?>
                     <?php endif; ?>
+                </td>
+                <td>
+                    <a class="csfr-required csfr-post material-icons text-danger" data-trans="delete_confirm" title="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Delete message');?>" href="<?php echo erLhcoreClassDesign::baseurl('messagebird/deletemessage')?>/<?php echo htmlspecialchars($item->id) ?>">delete</a>
                 </td>
             </tr>
         <?php endforeach; ?>

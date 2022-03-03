@@ -59,14 +59,11 @@ class erLhcoreClassModelMessageBirdMessage
                 return $this->updated_at_ago;
 
             case 'user':
-                $this->user = \erLhcoreClassModelUser::fetch($this->user_id);
+                $this->user = null;
+                if ($this->user_id > 0) {
+                    $this->user = \erLhcoreClassModelUser::fetch($this->user_id);
+                }
                 return $this->user;
-
-            case 'cloudtalk_user':
-                $this->cloudtalk_user = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoAgentNative::findOne(['filter' => [
-                    'cloudtalk_user_id' => $this->cloudtalk_user_id
-                ]]);
-                return $this->cloudtalk_user;
 
             case 'department':
                 $this->department = null;

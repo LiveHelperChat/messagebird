@@ -23,6 +23,11 @@ $ViewList['messages'] = array(
     'functions' => array('use_admin'),
 );
 
+$ViewList['deletemessage'] = array(
+    'params' => array('id'),
+    'functions' => array('use_admin'),
+);
+
 $ViewList['rawjson'] = array(
     'params' => array('id'),
     'uparams' => array(),
