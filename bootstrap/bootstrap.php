@@ -27,7 +27,7 @@ class erLhcoreClassExtensionMessagebird
             isset($params['data']['message']['platform']) &&
             $params['data']['message']['platform'] == 'whatsapp'
         ) {
-            $messageBird = LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::findOne(['filter' => ['conversation_id' => $params['data']['message']['conversationId']]]);
+            $messageBird = LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::findOne(['sort' => 'id DESC', 'filter' => ['conversation_id' => $params['data']['message']['conversationId']]]);
 
             if (is_object($messageBird) && $messageBird->dep_id > 0) {
                 // Chat
