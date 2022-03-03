@@ -28,7 +28,7 @@
                 <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Department');?>*</label>
                 <?php echo erLhcoreClassRenderHelper::renderCombobox(array(
                     'input_name'     => 'dep_id',
-                    'optional_field' => erTranslationClassLhTranslation::getInstance()->getTranslation('chat/lists/search_panel','Select department'),
+                    'optional_field' => erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Select department'),
                     'selected_id'    => $send->dep_id,
                     'css_class'      => 'form-control form-control-sm',
                     'list_function'  => 'erLhcoreClassModelDepartament::getList',

@@ -1,6 +1,6 @@
 <?php
 $modalHeaderClass = 'pt-1 pb-1 pl-2 pr-2';
-$modalHeaderTitle = erTranslationClassLhTranslation::getInstance()->getTranslation('chat/chatpreview','Message preview');
+$modalHeaderTitle = erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Message preview');
 $modalSize = 'lg';
 $modalBodyClass = 'p-1'
 ?>

@@ -17,11 +17,11 @@ $Result['content'] = $tpl->fetch();
 $Result['path'] = array(
     array(
         'url' => erLhcoreClassDesign::baseurl('messagebird/index'),
-        'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','MessageBird')
+        'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','MessageBird')
     ),
     array(
         'url' => erLhcoreClassDesign::baseurl('messagebird/settings'),
-        'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Templates')
+        'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Templates')
     )
 );
 ?>

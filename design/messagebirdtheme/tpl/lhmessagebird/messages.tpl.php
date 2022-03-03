@@ -1,4 +1,4 @@
-<h1><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Messages history');?></h1>
+<h1><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Messages history');?></h1>
 
 <?php include(erLhcoreClassDesign::designtpl('lhmessagebird/parts/form_filter.tpl.php'));?>
 
