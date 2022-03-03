@@ -14,6 +14,7 @@ CREATE TABLE `lhc_messagebird_message` (
                                            `dep_id` bigint(20) unsigned NOT NULL,
                                            `chat_id` bigint(20) unsigned NOT NULL,
                                            `initiation` bigint(20) unsigned NOT NULL,
+                                           `message_variables` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
                                            PRIMARY KEY (`id`),
                                            KEY `mb_id_message` (`mb_id_message`),
                                            KEY `conversation_id` (`conversation_id`)

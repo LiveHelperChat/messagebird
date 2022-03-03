@@ -31,7 +31,8 @@ class erLhcoreClassModelMessageBirdMessage
             'chat_id' => $this->chat_id,
             'dep_id' => $this->dep_id,
             'initiation' => $this->initiation,
-            'conversation_id' => $this->conversation_id
+            'conversation_id' => $this->conversation_id,
+            'message_variables' => $this->message_variables
         );
     }
 
@@ -76,18 +77,18 @@ class erLhcoreClassModelMessageBirdMessage
                 }
                 return $this->department;
 
-            case 'call_variables_array':
-                if (!empty($this->call_variables)) {
-                    $jsonData = json_decode($this->call_variables,true);
+            case 'message_variables_array':
+                if (!empty($this->message_variables)) {
+                    $jsonData = json_decode($this->message_variables,true);
                     if ($jsonData !== null) {
-                        $this->call_variables_array = $jsonData;
+                        $this->message_variables_array = $jsonData;
                     } else {
-                        $this->call_variables_array = $this->call_variables;
+                        $this->message_variables_array = $this->message_variables;
                     }
                 } else {
-                    $this->call_variables_array = array();
+                    $this->message_variables_array = array();
                 }
-                return $this->call_variables_array;
+                return $this->message_variables_array;
 
             default:
                 ;
@@ -117,6 +118,7 @@ class erLhcoreClassModelMessageBirdMessage
     public $mb_id_message = '';
     public $conversation_id = '';
     public $send_status_raw = '';
+    public $message_variables = '';
     public $chat_id = 0;
     public $dep_id = 0;
     public $initiation = self::INIT_US;

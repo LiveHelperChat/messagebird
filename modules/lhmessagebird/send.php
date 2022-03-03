@@ -58,11 +58,16 @@ if (ezcInputForm::hasPostData()) {
         $Errors[] = erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Please choose a department!');
     }
 
+    $messageVariables = $item->message_variables_array;
+    
     for ($i = 0; $i < 6; $i++) {
         if ($form->hasValidData('field_' . $i) && $form->{'field_' . $i}) {
-            $item->{'field_' . $i} = $form->{'field_' . $i};
+            $messageVariables['field_' . $i] = $form->{'field_' . $i};
         }
     }
+
+    $item->message_variables_array = $messageVariables;
+    $item->message_variables = json_encode($messageVariables);
 
     if ($form->hasValidData( 'template' ) && $form->template != '') {
         $template = explode('||',$form->template);

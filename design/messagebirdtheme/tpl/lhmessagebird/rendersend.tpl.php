@@ -23,7 +23,7 @@
     <div class="col-6" ng-non-bindable>
         <div class="form-group">
             <label class="font-weight-bold">{{<?php echo $i+1?>}}</label>
-            <input type="text" class="form-control form-control-sm" name="field_<?php echo $i+1?>" value="">
+            <input type="text" class="form-control form-control-sm" name="field_<?php echo $i+1?>" value="<?php if (isset($data['field_' .  $i + 1])) : ?><?php echo htmlspecialchars($data['field_' .  $i + 1])?><?php endif; ?>">
         </div>
     </div>
 <?php endfor; ?>

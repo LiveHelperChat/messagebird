@@ -16,7 +16,7 @@ foreach (['created_at', 'updated_at', 'status', 'user_id', 'chat_id', 'dep_id', 
     $def->properties[$posAttr]->propertyType = ezcPersistentObjectProperty::PHP_TYPE_INT;
 }
 
-foreach (['phone', 'template', 'message', 'language', 'mb_id_message', 'send_status_raw', 'conversation_id'] as $posAttr) {
+foreach (['phone', 'template', 'message', 'language', 'mb_id_message', 'send_status_raw', 'conversation_id', 'message_variables'] as $posAttr) {
     $def->properties[$posAttr] = new ezcPersistentObjectProperty();
     $def->properties[$posAttr]->columnName   = $posAttr;
     $def->properties[$posAttr]->propertyName = $posAttr;

@@ -39,13 +39,17 @@
             <div class="form-group">
                 <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Template');?>*</label>
                 <select name="template" class="form-control form-control-sm" id="template-to-send">
-                    <option value="">Choose a template</option>
+                    <option value=""><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Choose a template');?></option>
                     <?php foreach (LiveHelperChatExtension\messagebird\providers\MessageBirdLiveHelperChat::getInstance()->getTemplates()['items'] as $template) : ?>
                         <option <?php if ($send->template == $template['name']) : ?>selected="selected"<?php endif;?> value="<?php echo htmlspecialchars($template['name'] . '||' . $template['language'])?>"><?php echo htmlspecialchars($template['name'] . ' [' . $template['language'] . ']')?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
-            
+
+            <script>
+                var messageFieldsValues = <?php echo json_encode($send->message_variables_array);?>;
+            </script>
+
             <div id="arguments-template-form"></div>
         </div>
         <div class="col-4">

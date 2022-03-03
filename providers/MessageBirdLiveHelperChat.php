@@ -80,10 +80,12 @@ namespace LiveHelperChatExtension\messagebird\providers {
 
             $item->message = $bodyText;
 
+            $messageVariables = $item->message_variables_array;
+
             for ($i = 0; $i < 6; $i++) {
-                if ($item->{'field_' . $i} != '') {
-                    $item->message = str_replace('{{'.$i.'}}',$item->{'field_' . $i},$item->message);
-                    $argumentsTemplate[] = ['default' => $item->{'field_' . $i}];
+                if (isset($messageVariables['field_' . $i]) && $messageVariables['field_' . $i] != '') {
+                    $item->message = str_replace('{{'.$i.'}}', $messageVariables['field_' . $i], $item->message);
+                    $argumentsTemplate[] = ['default' => $messageVariables['field_' . $i]];
                 }
             }
 
