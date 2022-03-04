@@ -8,6 +8,7 @@
         <tr>
             <th width="1%"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','ID');?></th>
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Department');?></th>
+            <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Template');?></th>
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','User');?></th>
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Phone');?></th>
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Send status');?></th>
@@ -23,6 +24,9 @@
                 </td>
                 <td>
                     <?php echo htmlspecialchars((string)$item->department)?>
+                </td>
+                <td>
+                    <?php echo htmlspecialchars((string)$item->template)?>
                 </td>
                 <td>
                     <?php if ($item->user_id > 0) : ?>
