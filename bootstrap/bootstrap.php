@@ -82,10 +82,19 @@ class erLhcoreClassExtensionMessagebird
                 'sent' => LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_SENT,
                 'delivered' => LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_DELIVERED,
                 'read' => LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_READ,
+                'rejected' => LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_REJECTED,
             ];
 
             $messageBird->conversation_id = $params['data']['message']['conversationId'];
-            $messageBird->status = $statusMap[$params['data']['message']['status']];
+
+            if ($messageBird->status != LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_READ) {
+                $messageBird->status = $statusMap[$params['data']['message']['status']];
+            }
+
+            if ($messageBird->status == LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_REJECTED) {
+                $messageBird->send_status_raw = $messageBird->send_status_raw . json_encode($params['data']);
+            }
+
             $messageBird->saveThis();
             
             // We do not need to do anything else with these type of messages

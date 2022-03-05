@@ -1,6 +1,17 @@
+<?php /*
+<pre>
+    <?php print_r($template);?>
+</pre>
+*/ ?>
+
 <h6><?php echo htmlspecialchars($template['name'])?> <span class="badge badge-secondary"><?php echo htmlspecialchars($template['category'])?></span></h6>
 <?php $fieldsCount = 0;?>
 <div class="rounded bg-light p-2">
+<?php foreach ($template['components'] as $component) : ?>
+<?php if ($component['type'] == 'HEADER' && $component['format'] == 'IMAGE' && isset($component['example']['header_url'][0])) : ?>
+<img src="<?php echo htmlspecialchars($component['example']['header_url'][0])?>" />
+<?php endif; ?>
+<?php endforeach; ?>
 <?php foreach ($template['components'] as $component) : ?>
     <?php if ($component['type'] == 'BODY') :
         $matchesReplace = [];

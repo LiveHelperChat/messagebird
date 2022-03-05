@@ -40,7 +40,7 @@ if (isset($_POST['UploadFileAction'])) {
         $Errors[] = erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Please choose a template!');
     }
 
-    if (empty($errors) && erLhcoreClassSearchHandler::isFile('files',array('csv'))) {
+    if (empty($Errors) && erLhcoreClassSearchHandler::isFile('files',array('csv'))) {
 
         $dir = 'var/tmpfiles/';
         erLhcoreClassChatEventDispatcher::getInstance()->dispatch('theme.temppath', array('dir' => & $dir));
@@ -98,8 +98,8 @@ if (isset($_POST['UploadFileAction'])) {
             $tpl->set('errors', [erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Expected columns does not match!')]);
         }
 
-    } elseif (!empty($errors)) {
-        $tpl->set('errors', $errors);
+    } elseif (!empty($Errors)) {
+        $tpl->set('errors', $Errors);
     } else {
         $tpl->set('errors', [erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Invalid file format')]);
     }

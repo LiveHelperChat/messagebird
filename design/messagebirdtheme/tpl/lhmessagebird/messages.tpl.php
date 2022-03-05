@@ -57,6 +57,8 @@
                         <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Failed');?>
                     <?php elseif ($item->status == \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_PENDING_PROCESS) : ?>
                         <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Pending to be processed');?>
+                    <?php elseif ($item->status == \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_REJECTED) : ?>
+                        <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Rejected');?>
                     <?php elseif ($item->status == \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_SENT) : ?>
                         <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Sent');?>
                     <?php endif; ?>
