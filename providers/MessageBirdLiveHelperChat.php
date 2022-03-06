@@ -79,18 +79,44 @@ namespace LiveHelperChatExtension\messagebird\providers {
                     $bodyText = $component['text'];
                 } elseif ($component['type'] == 'BUTTONS') {
                     foreach ($component['buttons'] as $indexButton => $button) {
-                        /*$bodyArguments[] = [
-                            "type" => "button",
-                            "sub_type" => "quick_reply",
-                            "index" => $indexButton,
-                            "parameters" => [
-                                [
-                                    "type" => "payload",
-                                    "payload" => $item->template.'-quick_reply_'.$indexButton
+                        if ($button['type'] == 'QUICK_REPLY') {
+                            $bodyArguments[] = [
+                                "type" => "button",
+                                "sub_type" => "quick_reply",
+                                "index" => (int)$indexButton,
+                                "parameters" => [
+                                    [
+                                        "type" => "payload",
+                                        "payload" => $item->template.'-quick_reply_'.$indexButton,
+                                    ]
+                                ]
+                            ];
+                        }
+                    }
+                } elseif ($component['type'] == 'HEADER' && $component['format'] == 'VIDEO') {
+                    $bodyArguments[] = [
+                        "type" => "header",
+                        "parameters" => [
+                            [
+                                "type"=> "video",
+                                "video"=> [
+                                    "url"=> (isset($component['example']['header_url'][0]) ? $component['example']['header_url'][0] : 'https://omni.enviosok.com/design/defaulttheme/images/general/logo.png'),
                                 ]
                             ]
-                        ];*/
-                    }
+                        ]
+                    ];
+                } elseif ($component['type'] == 'HEADER' && $component['format'] == 'DOCUMENT') {
+                    $bodyArguments[] = [
+                        "type" => "header",
+                        "parameters" => [
+                            [
+                                "type"=> "document",
+                                "document"=> [
+                                    "url"=> (isset($component['example']['header_url'][0]) ? $component['example']['header_url'][0] : 'https://omni.enviosok.com/design/defaulttheme/images/general/logo.png'),
+                                ]
+                            ]
+                        ]
+                    ];
                 } elseif ($component['type'] == 'HEADER' && $component['format'] == 'IMAGE') {
                     $bodyArguments[] = [
                         "type" => "header",
