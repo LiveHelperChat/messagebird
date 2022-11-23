@@ -7,7 +7,7 @@ $ViewList = array();
 
 $ViewList['index'] = array(
     'params' => array(),
-    'uparams' => array(),
+    'uparams' => array('action','csfr'),
     'functions' => array('use_admin'),
 );
 
@@ -55,6 +55,54 @@ $ViewList['rendersend'] = array(
 $ViewList['templates'] = array(
     'params' => array(),
     'uparams' => array(),
+    'functions' => array('use_admin'),
+);
+
+/* SMS Actions */
+$ViewList['sendsms'] = array(
+    'params' => array(),
+    'uparams' => array(),
+    'functions' => array('use_admin'),
+);
+
+$ViewList['phonenumbers'] = array(
+    'params' => array(),
+    'uparams' => array(),
+    'functions' => array('configure'),
+);
+
+$ViewList['newphonenumber'] = array(
+    'params' => array(),
+    'uparams' => array(),
+    'functions' => array('configure'),
+);
+
+$ViewList['editphonenumber'] = array(
+    'params' => array('id'),
+    'uparams' => array(),
+    'functions' => array('configure'),
+);
+
+$ViewList['deletephone'] = array(
+    'params' => array('id'),
+    'uparams' => array('csfr'),
+    'functions' => array('configure'),
+);
+
+$ViewList['smsmessages'] = array(
+    'params' => array(),
+    'uparams' => array(),
+    'functions' => array('use_admin'),
+);
+
+$ViewList['rawjsonsms'] = array(
+    'params' => array('id'),
+    'uparams' => array(),
+    'functions' => array('use_admin'),
+);
+
+$ViewList['deletesmsmessage'] = array(
+    'params' => array('id'),
     'functions' => array('use_admin'),
 );
 
