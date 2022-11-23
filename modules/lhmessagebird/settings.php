@@ -70,6 +70,24 @@ if (isset($_POST['StoreOptions'])) {
     $mbOptions->value = serialize($data);
     $mbOptions->saveThis();
 
+    // Update access key instantly
+    $incomingWebhook = \erLhcoreClassModelChatIncomingWebhook::findOne(['filter' => ['name' => 'MessageBirdSMS']]);
+
+    if (is_object($incomingWebhook)) {
+        $conditionsArray = $incomingWebhook->conditions_array;
+        if (isset($conditionsArray['attr']) && is_array($conditionsArray['attr'])) {
+            foreach ($conditionsArray['attr'] as $attrIndex => $attrValue) {
+                if ($attrValue['key'] == 'access_key') {
+                    $attrValue['value'] = $data['access_key'];
+                    $conditionsArray['attr'][$attrIndex] = $attrValue;
+                }
+            }
+        }
+        $incomingWebhook->conditions_array = $conditionsArray;
+        $incomingWebhook->configuration = json_encode($conditionsArray);
+        $incomingWebhook->updateThis(['update' => ['configuration']]);
+    }
+
     $tpl->set('updated','done');
 }
 

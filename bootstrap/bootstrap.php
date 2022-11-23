@@ -46,6 +46,30 @@ class erLhcoreClassExtensionMessagebird
                 $messageBird->chat_id = $params['chat']->id;
                 $messageBird->updateThis(['update' => ['chat_id']]);
             }
+        } else if ($params['webhook']->scope == 'messagebirdsms' && isset($params['data']['recipient'])) {
+
+            $phone = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdPhoneNumber::findOne(['filter' => ['phone' => $params['data']['recipient']]]);
+
+            if (is_object($phone)) {
+                $params['chat']->dep_id = $phone->dep_id;
+                $params['chat']->updateThis(['update' => ['dep_id']]);
+
+                // Perhaps it's a visitor reply to one of our messages
+                $lastMessage = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::findOne(['filter' => ['phone' => $params['data']['sender'], 'sender_phone_id' => $phone->id]]);
+                if (is_object($lastMessage) && $lastMessage->chat_id == 0) {
+                    // Save template message first before saving initial response in the lhc core
+                    $msg = new erLhcoreClassModelmsg();
+                    $msg->msg = $lastMessage->message;
+                    $msg->chat_id = $params['chat']->id;
+                    $msg->user_id = $lastMessage->user_id;
+                    $msg->time = $lastMessage->created_at;
+                    erLhcoreClassChat::getSession()->save($msg);
+
+                    // Update message bird
+                    $lastMessage->chat_id = $params['chat']->id;
+                    $lastMessage->updateThis(['update' => ['chat_id']]);
+                }
+            }
         }
     }
 
@@ -97,6 +121,75 @@ class erLhcoreClassExtensionMessagebird
 
             $messageBird->saveThis();
             
+            // We do not need to do anything else with these type of messages
+            exit;
+            
+        } else if ($params['webhook']->scope == 'messagebirdsms' && isset($_GET['status']) && isset($_GET['id'])) {
+
+            $lastMessage = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::findOne([
+                'filter' => [
+                    'mb_id_message' => (string)$_GET['id'],
+                ]
+            ]);
+
+            if (!is_object($lastMessage)) {
+                // We do not need to do anything else with these type of messages
+                exit;
+            }
+
+            $statusMap = [
+                 'pending' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_PENDING,
+                 'sent' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_SENT,
+                 'delivered' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_DELIVERED,
+                 'buffered' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_BUFFERED,
+                 'expired' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_EXPIRED,
+                 'delivery_failed' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_FAILED,
+                 'scheduled' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_SCHEDULED,
+            ];
+
+            if (isset($statusMap[(string)$_GET['status']])) {
+                $lastMessage->status = $statusMap[(string)$_GET['status']];
+                $lastMessage->status_txt = mb_substr((string)$_GET['statusReason'], 0, 100);
+                $lastMessage->updateThis(['update' => ['status','status_txt']]);
+            }
+
+            // Insert message as a normal message to the last chat customer had
+            // In case there is chosen reopen old chat
+            // Which by the case is the default option of the extension
+            if (in_array($lastMessage->status,[
+                    \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_DELIVERED
+                ]) && $lastMessage->chat_id == 0) {
+
+                $presentConversation = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::findOne([
+                    'filter' => [
+                        'sender_phone_id' => $lastMessage->sender_phone_id,
+                        'phone' => $lastMessage->phone
+                    ],
+                    'filternot' => [
+                        'chat_id' => 0
+                    ],
+                    'sort' => '`id` DESC'
+                ]);
+
+                if (is_object($presentConversation)) {
+
+                    $chat = erLhcoreClassModelChat::fetch($presentConversation->chat_id);
+
+                    if (is_object($chat)) {
+                        // Save template message first before saving initial response in the lhc core
+                        $msg = new erLhcoreClassModelmsg();
+                        $msg->msg = $lastMessage->message;
+                        $msg->chat_id = $presentConversation->chat_id;
+                        $msg->user_id = $lastMessage->user_id;
+                        $msg->time = $lastMessage->created_at;
+                        erLhcoreClassChat::getSession()->save($msg);
+
+                        $chat->last_msg_id = $msg->id;
+                        $chat->updateThis(['update' => ['last_msg_id']]);
+                    }
+                }
+            }
+
             // We do not need to do anything else with these type of messages
             exit;
         }

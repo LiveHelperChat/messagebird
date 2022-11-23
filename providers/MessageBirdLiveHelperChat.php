@@ -60,6 +60,63 @@ namespace LiveHelperChatExtension\messagebird\providers {
             ]);
         }
 
+        public function sendSMS($item) {
+
+            $response = null;
+
+            try {
+
+                $paramsRequest = [
+                    'baseurl' => 'https://rest.messagebird.com/',
+                    'method' => 'messages',
+                    'body_json' => json_encode([
+                        'body' => $item->message,
+                        'originator' => ($item->originator != '' ? $item->originator : $item->sender_phone->phone),
+                        'recipients' => $item->phone,
+                        'reference'  => 'verification'
+                    ])
+                ];
+
+                $response = $this->getRestAPI($paramsRequest);
+
+                // Responder
+                if (isset($response['id'])) {
+                    $item->mb_id_message = $response['id'];
+                } else {
+                    throw new \Exception('Message ID was not returned.');
+                }
+
+                if (isset($response['recipients']['items']) && is_array($response['recipients']['items'])) {
+                    foreach ($response['recipients']['items'] as $itemRecipient) {
+                        if ($itemRecipient['recipient'] == $item->phone) {
+                            $statusMap = [
+                                'pending' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_PENDING,
+                                'sent' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_SENT,
+                                'delivered' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_DELIVERED,
+                                'buffered' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_BUFFERED,
+                                'expired' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_EXPIRED,
+                                'delivery_failed' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_FAILED,
+                                'scheduled' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_SCHEDULED,
+                            ];
+                            if (isset($statusMap[$itemRecipient['status']])) {
+                                $item->status = $statusMap[$itemRecipient['status']];
+                            } else {
+                                throw new \Exception('Unknown status - ' . $itemRecipient['status']);
+                            }
+                        }
+                    }
+                }
+
+                $item->send_status_raw = json_encode($response);
+                $item->saveThis();
+
+            } catch (\Exception $e) {
+                $item->send_status_raw = json_encode($response) . $e->getTraceAsString() . $e->getMessage();
+                $item->status = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_FAILED;
+                $item->saveThis();
+            }
+        }
+
         public function sendTemplate($item, $templates = []) {
 
             $argumentsTemplate = [];

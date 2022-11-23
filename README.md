@@ -15,3 +15,13 @@ Setup cronjob to run every minute. It will do mass sending.
 ```
 php cron.php -s site_admin -e messagebird -c cron/masssending
 ```
+
+# SMS Support
+
+Set
+
+```
+Developers -> API Settings -> STATUS REPORTS URL`
+```
+
+As incoming webhook
