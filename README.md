@@ -24,4 +24,4 @@ Set
 Developers -> API Settings -> STATUS REPORTS URL`
 ```
 
-As incoming webhook
+As incoming webhook. URL itself you will find in `Home -> System configuration -> Incoming webhooks` in `MessageBirdSMS` edit window.
