@@ -10,8 +10,8 @@
 
             <?php if (isset($update)) : ?>
                 <div role="alert" class="alert alert-success alert-dismissible fade show">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+
                     </button>
                     <ul>
                         <li><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Imported');?> - <?php echo $update['imported']?></li>
@@ -51,13 +51,13 @@
             </script>
 
             <p><small><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','First row in CSV is skipped. Columns order');?> - </small>
-                <span class="badge badge-secondary mr-2">phone</span>
-                <span class="badge badge-secondary mr-2">field_1</span>
-                <span class="badge badge-secondary mr-2">field_2</span>
-                <span class="badge badge-secondary mr-2">field_3</span>
-                <span class="badge badge-secondary mr-2">field_4</span>
-                <span class="badge badge-secondary mr-2">field_5</span>
-                <span class="badge badge-secondary">field_6</span>
+                <span class="badge bg-secondary me-2">phone</span>
+                <span class="badge bg-secondary me-2">field_1</span>
+                <span class="badge bg-secondary me-2">field_2</span>
+                <span class="badge bg-secondary me-2">field_3</span>
+                <span class="badge bg-secondary me-2">field_4</span>
+                <span class="badge bg-secondary me-2">field_5</span>
+                <span class="badge bg-secondary">field_6</span>
             </p>
 
             <input type="submit" class="btn btn-sm btn-secondary" name="UploadFileAction" value="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Import and start sending');?>" />

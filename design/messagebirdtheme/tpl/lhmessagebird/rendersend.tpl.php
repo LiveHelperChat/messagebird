@@ -3,7 +3,7 @@
     <?php print_r($template);?>
 </pre>*/ ?>
 
-<h6><?php echo htmlspecialchars($template['name'])?> <span class="badge badge-secondary"><?php echo htmlspecialchars($template['category'])?></span></h6>
+<h6><?php echo htmlspecialchars($template['name'])?> <span class="badge bg-secondary"><?php echo htmlspecialchars($template['category'])?></span></h6>
 <?php $fieldsCount = 0;?>
 <div class="rounded bg-light p-2">
     <?php foreach ($template['components'] as $component) : ?>
@@ -12,12 +12,12 @@
         <?php endif; ?>
         <?php if ($component['type'] == 'HEADER' && $component['format'] == 'DOCUMENT' && isset($component['example']['header_url'][0])) : ?>
             <div>
-                <span class="badge badge-secondary">FILE: <?php echo htmlspecialchars($component['example']['header_url'][0])?></span>
+                <span class="badge bg-secondary">FILE: <?php echo htmlspecialchars($component['example']['header_url'][0])?></span>
             </div>
         <?php endif; ?>
         <?php if ($component['type'] == 'HEADER' && $component['format'] == 'VIDEO' && isset($component['example']['header_url'][0])) : ?>
             <div>
-                <span class="badge badge-secondary">VIDEO: <?php echo htmlspecialchars($component['example']['header_url'][0])?></span>
+                <span class="badge bg-secondary">VIDEO: <?php echo htmlspecialchars($component['example']['header_url'][0])?></span>
             </div>
         <?php endif; ?>
     <?php endforeach; ?>
@@ -42,7 +42,7 @@
     <?php for ($i = 0; $i < $fieldsCount; $i++) : ?>
         <div class="col-6" ng-non-bindable>
             <div class="form-group">
-                <label class="font-weight-bold">{{<?php echo $i+1?>}}</label>
+                <label class="fw-bold">{{<?php echo $i+1?>}}</label>
                 <input type="text" class="form-control form-control-sm" name="field_<?php echo $i+1?>" value="<?php if (isset($data['field_' .  $i + 1])) : ?><?php echo htmlspecialchars($data['field_' .  $i + 1])?><?php endif; ?>">
             </div>
         </div>

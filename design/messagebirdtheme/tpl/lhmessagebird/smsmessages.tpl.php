@@ -42,7 +42,7 @@
                     <?php endif; ?>
                 </td>
                 <td>
-                    <span class="badge badge-secondary mr-1"><?php if ($item->status == \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_PENDING) : ?>
+                    <span class="badge bg-secondary me-1"><?php if ($item->status == \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_PENDING) : ?>
                         <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Pending');?>
                     <?php elseif ($item->status == \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_SENT) : ?>
                         <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Sent');?>
