@@ -6,9 +6,9 @@
 <div class="form-group">
     <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Phone number');?>*</label>
     <div class="input-group input-group-sm mb-3">
-        <div class="input-group-prepend">
+       
             <span class="input-group-text" id="basic-addon1">+</span>
-        </div>
+
         <input type="text" maxlength="20" class="form-control form-control-sm" placeholder="E.g 37065277777" name="phone" value="<?php echo htmlspecialchars($item->phone)?>" />
     </div>
 </div>

@@ -36,9 +36,9 @@
     <div class="form-group">
         <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Recipient phone');?>*</label>
         <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
+
                 <span class="input-group-text" id="basic-addon1">+</span>
-            </div>
+            
             <input type="text" name="phone" class="form-control" value="<?php echo htmlspecialchars((string)$send->phone)?>" aria-label="Username" aria-describedby="basic-addon1">
         </div>
      </div>
