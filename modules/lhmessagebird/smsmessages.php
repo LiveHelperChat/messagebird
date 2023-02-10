@@ -31,7 +31,7 @@ if (empty($filterWithoutSort) && method_exists('\LiveHelperChatExtension\message
 $pages = new lhPaginator();
 $pages->items_total = is_numeric($rowsNumber) ? $rowsNumber : \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::getCount($filterParams['filter']);
 $pages->translationContext = 'chat/activechats';
-$pages->serverURL = erLhcoreClassDesign::baseurl('messagebird/messages').$append;
+$pages->serverURL = erLhcoreClassDesign::baseurl('messagebird/smsmessages').$append;
 $pages->paginate();
 $tpl->set('pages',$pages);
 
