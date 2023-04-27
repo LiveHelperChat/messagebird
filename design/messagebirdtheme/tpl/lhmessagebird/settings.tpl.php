@@ -9,7 +9,7 @@
     <?php endif; ?>
 
     <div class="form-group">
-        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Integration endpoint'); ?></label>
+        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Integration endpoint (WhatsApp)'); ?></label>
         <input type="text" name="endpoint" placeholder="Sandbox - https://integrations.messagebird.com" class="form-control form-control-sm" list="endpoint" value="<?php isset($mb_options['endpoint']) ? print htmlspecialchars($mb_options['endpoint']) : ''?>" />
         <datalist id="endpoint">
             <option value="https://integrations.messagebird.com">
@@ -17,17 +17,18 @@
     </div>
 
     <div class="form-group">
-        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Channel ID'); ?></label>
+        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Channel ID (WhatsApp)'); ?></label>
         <input type="text" name="channel_id" class="form-control form-control-sm" value="<?php isset($mb_options['channel_id']) ? print htmlspecialchars($mb_options['channel_id']) : ''?>" />
+        <div class="fs12"><i>https://dashboard.messagebird.com/en/channels/whatsapp</i></div>
     </div>
 
     <div class="form-group">
-        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Template ID Namespace'); ?></label>
+        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','WhatsApp Template ID Namespace'); ?></label>
         <input type="text" name="namespace" class="form-control form-control-sm" value="<?php isset($mb_options['namespace']) ? print htmlspecialchars($mb_options['namespace']) : ''?>" />
     </div>
 
     <div class="form-group">
-        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Conversation endpoint'); ?></label>
+        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Conversation endpoint (WhatsApp)'); ?></label>
         <input type="text" name="convendpoint" placeholder="Sandbox - https://conversations.messagebird.com" class="form-control form-control-sm" list="convendpoint" value="<?php isset($mb_options['convendpoint']) ? print htmlspecialchars($mb_options['convendpoint']) : ''?>" />
         <datalist id="convendpoint">
             <option value="https://whatsapp-sandbox.messagebird.com">
@@ -36,8 +37,13 @@
     </div>
 
     <div class="form-group">
-        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Access Key'); ?></label>
+        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Access Key (WhatsApp)'); ?></label>
         <input type="text" name="access_key" class="form-control form-control-sm" value="<?php isset($mb_options['access_key']) ? print htmlspecialchars($mb_options['access_key']) : ''?>" />
+    </div>
+
+    <div class="form-group">
+        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Access Key (SMS)'); ?></label>
+        <input type="text" name="access_key_sms" class="form-control form-control-sm" value="<?php isset($mb_options['access_key_sms']) ? print htmlspecialchars($mb_options['access_key_sms']) : ''?>" />
     </div>
 
     <button name="StoreOptions" class="btn btn-sm btn-secondary" type="submit"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Save'); ?></button>

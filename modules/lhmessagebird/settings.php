@@ -16,6 +16,9 @@ if (isset($_POST['StoreOptions'])) {
         'access_key' => new ezcInputFormDefinitionElement(
             ezcInputFormDefinitionElement::OPTIONAL, 'unsafe_raw'
         ),
+        'access_key_sms' => new ezcInputFormDefinitionElement(
+            ezcInputFormDefinitionElement::OPTIONAL, 'unsafe_raw'
+        ),
         'endpoint' => new ezcInputFormDefinitionElement(
             ezcInputFormDefinitionElement::OPTIONAL, 'unsafe_raw'
         ),
@@ -37,6 +40,12 @@ if (isset($_POST['StoreOptions'])) {
         $data['access_key'] = $form->access_key;
     } else {
         $data['access_key'] = '';
+    }
+
+    if ( $form->hasValidData( 'access_key_sms' )) {
+        $data['access_key_sms'] = $form->access_key_sms;
+    } else {
+        $data['access_key_sms'] = '';
     }
 
     if ( $form->hasValidData( 'endpoint' )) {
@@ -70,8 +79,8 @@ if (isset($_POST['StoreOptions'])) {
     $mbOptions->value = serialize($data);
     $mbOptions->saveThis();
 
-    // Update access key instantly
-    $incomingWebhook = \erLhcoreClassModelChatIncomingWebhook::findOne(['filter' => ['name' => 'MessageBirdSMS']]);
+    // Update access key WhatsApp
+    $incomingWebhook = \erLhcoreClassModelChatIncomingWebhook::findOne(['filter' => ['name' => 'MessageBirdWhatsApp']]);
 
     if (is_object($incomingWebhook)) {
         $conditionsArray = $incomingWebhook->conditions_array;
@@ -79,6 +88,27 @@ if (isset($_POST['StoreOptions'])) {
             foreach ($conditionsArray['attr'] as $attrIndex => $attrValue) {
                 if ($attrValue['key'] == 'access_key') {
                     $attrValue['value'] = $data['access_key'];
+                    $conditionsArray['attr'][$attrIndex] = $attrValue;
+                } else if ($attrValue['key'] == 'host') {
+                    $attrValue['value'] = $data['convendpoint'] . '/v1/conversations/';
+                    $conditionsArray['attr'][$attrIndex] = $attrValue;
+                }
+            }
+        }
+        $incomingWebhook->conditions_array = $conditionsArray;
+        $incomingWebhook->configuration = json_encode($conditionsArray);
+        $incomingWebhook->updateThis(['update' => ['configuration']]);
+    }
+
+    // Update access key instantly SMS
+    $incomingWebhook = \erLhcoreClassModelChatIncomingWebhook::findOne(['filter' => ['name' => 'MessageBirdSMS']]);
+
+    if (is_object($incomingWebhook)) {
+        $conditionsArray = $incomingWebhook->conditions_array;
+        if (isset($conditionsArray['attr']) && is_array($conditionsArray['attr'])) {
+            foreach ($conditionsArray['attr'] as $attrIndex => $attrValue) {
+                if ($attrValue['key'] == 'access_key') {
+                    $attrValue['value'] = $data['access_key_sms'];
                     $conditionsArray['attr'][$attrIndex] = $attrValue;
                 }
             }

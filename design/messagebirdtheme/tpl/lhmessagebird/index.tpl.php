@@ -6,6 +6,10 @@
 </ul>
 <?php endif;?>
 
+<?php if (isset($update)) : ?>
+    <?php $msg = erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Settings updated'); ?>
+    <?php include(erLhcoreClassDesign::designtpl('lhkernel/alert_success.tpl.php'));?>
+<?php endif; ?>
 
 <h4><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','WhatsApp');?></h4>
 <ul>
@@ -15,17 +19,17 @@
     <li><a href="<?php echo erLhcoreClassDesign::baseurl('messagebird/messages')?>"><span class="material-icons">chat</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','WhatsApp Messages');?></a></li>
 </ul>
 
+<div class="btn-group mb-2" role="group" aria-label="Basic example">
+    <a class="btn btn-sm btn-secondary csfr-required" href="<?php echo erLhcoreClassDesign::baseurl('messagebird/index')?>/(action)/whatsapp" >Install/Update WhatsApp Handler</a>
+    <a class="btn btn-sm btn-danger csfr-required " data-trans="delete_confirm" href="<?php echo erLhcoreClassDesign::baseurl('messagebird/index')?>/(action)/removewhatsapp" >Remove WhatsApp Handler</a>
+</div>
+
 <h4><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','SMS');?></h4>
 <ul>
     <li><a href="<?php echo erLhcoreClassDesign::baseurl('messagebird/phonenumbers')?>"><span class="material-icons">phone</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','SMS Phone Numbers');?></a></li>
     <li><a href="<?php echo erLhcoreClassDesign::baseurl('messagebird/sendsms')?>"><span class="material-icons">sms</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Send SMS');?></a></li>
     <li><a href="<?php echo erLhcoreClassDesign::baseurl('messagebird/smsmessages')?>"><span class="material-icons">sms</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','SMS Messages');?></a></li>
 </ul>
-
-<?php if (isset($update)) : ?>
-    <?php $msg = erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Settings updated'); ?>
-        <?php include(erLhcoreClassDesign::designtpl('lhkernel/alert_success.tpl.php'));?>
-<?php endif; ?>
 
 <div class="btn-group" role="group" aria-label="Basic example">
     <a class="btn btn-sm btn-secondary csfr-required" href="<?php echo erLhcoreClassDesign::baseurl('messagebird/index')?>/(action)/sms" >Install/Update SMS Handler</a>

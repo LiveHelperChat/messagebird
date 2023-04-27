@@ -225,7 +225,7 @@ namespace LiveHelperChatExtension\messagebird\providers {
                             'components' => $bodyArguments
                         ]
                     ]
-                ])
+                ], JSON_PRETTY_PRINT)
             ];
 
             $response = null;
