@@ -16,6 +16,10 @@ Setup cronjob to run every minute. It will do mass sending.
 php cron.php -s site_admin -e messagebird -c cron/masssending
 ```
 
+More information 
+
+> https://doc.livehelperchat.com/docs/integrating/messagebird-whatsapp
+
 # SMS Support
 
 Set
