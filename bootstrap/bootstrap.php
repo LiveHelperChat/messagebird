@@ -141,10 +141,21 @@ class erLhcoreClassExtensionMessagebird
                             $msg->chat_id = $chat->id;
                             $msg->user_id = $messageBird->user_id;
                             $msg->time = $messageBird->created_at;
+
+                            $supportUser = \erLhcoreClassModelUser::fetch($msg->user_id);
+
+                            if (is_object($supportUser)) {
+                                $msg->name_support = $supportUser->name_support;
+                                \LiveHelperChat\Models\Departments\UserDepAlias::getAlias(array('scope' => 'msg', 'msg' => & $msg, 'chat' => $chat));
+                            }
+
                             \erLhcoreClassChat::getSession()->save($msg);
 
                             $chat->last_msg_id = $msg->id;
                             $chat->updateThis(['update' => ['last_msg_id']]);
+
+                            // For instant refresh back office operator
+                            \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('chat.web_add_msg_admin', array('msg' => & $msg, 'chat' => & $chat));
                         }
                     }
                 }
