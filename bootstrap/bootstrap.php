@@ -155,7 +155,7 @@ class erLhcoreClassExtensionMessagebird
                             $chat->updateThis(['update' => ['last_msg_id']]);
 
                             // For instant refresh back office operator
-                            \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('chat.web_add_msg_admin', array('msg' => & $msg, 'chat' => & $chat));
+                            \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('chat.messages_added_passive', array('msg' => & $msg, 'chat' => & $chat));
                         }
                     }
                 }
