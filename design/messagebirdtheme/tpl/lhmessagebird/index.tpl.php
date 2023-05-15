@@ -14,8 +14,10 @@
 <h4><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','WhatsApp');?></h4>
 <ul>
     <li><a href="<?php echo erLhcoreClassDesign::baseurl('messagebird/templates')?>"><span class="material-icons">description</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','WhatsApp Templates');?></a></li>
-    <li><a href="<?php echo erLhcoreClassDesign::baseurl('messagebird/send')?>"><span class="material-icons">send</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Send WhatsApp a single message');?></a></li>
-    <li><a href="<?php echo erLhcoreClassDesign::baseurl('messagebird/massmessage')?>"><span class="material-icons">forum</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Send WhatsApp a mass message');?></a></li>
+    <?php if (erLhcoreClassUser::instance()->hasAccessTo('lhmessagebird','use_whatsapp')) : ?>
+        <li><a href="<?php echo erLhcoreClassDesign::baseurl('messagebird/send')?>"><span class="material-icons">send</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Send WhatsApp a single message');?></a></li>
+        <li><a href="<?php echo erLhcoreClassDesign::baseurl('messagebird/massmessage')?>"><span class="material-icons">forum</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Send WhatsApp a mass message');?></a></li>
+    <?php endif; ?>
     <li><a href="<?php echo erLhcoreClassDesign::baseurl('messagebird/messages')?>"><span class="material-icons">chat</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','WhatsApp Messages');?></a></li>
 </ul>
 

@@ -120,7 +120,36 @@ class erLhcoreClassExtensionMessagebird
             }
 
             $messageBird->saveThis();
-            
+
+            // Append as a message to active chat once message is delivered
+            // Happens if an operator sends another message during active conversation
+            if ($messageBird->status == \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_DELIVERED) {
+
+                $incomingWebhook = \erLhcoreClassModelChatIncomingWebhook::findOne(['filter' => ['name' => 'MessageBirdWhatsApp']]);
+
+                if (is_object($incomingWebhook)) {
+
+                    $presentChat = \erLhcoreClassModelChatIncoming::findOne(['sort' => '`id` DESC','filter' => [
+                        'chat_external_id' => $messageBird->conversation_id,
+                        'incoming_id' => $incomingWebhook->id]]);
+
+                    if (is_object($presentChat)) {
+                        $chat = $presentChat->chat;
+                        if (is_object($chat) && ($chat->status == \erLhcoreClassModelChat::STATUS_ACTIVE_CHAT || $chat->status == \erLhcoreClassModelChat::STATUS_PENDING_CHAT)) {
+                            $msg = new \erLhcoreClassModelmsg();
+                            $msg->msg = $messageBird->message;
+                            $msg->chat_id = $chat->id;
+                            $msg->user_id = $messageBird->user_id;
+                            $msg->time = $messageBird->created_at;
+                            \erLhcoreClassChat::getSession()->save($msg);
+
+                            $chat->last_msg_id = $msg->id;
+                            $chat->updateThis(['update' => ['last_msg_id']]);
+                        }
+                    }
+                }
+            }
+
             // We do not need to do anything else with these type of messages
             exit;
             

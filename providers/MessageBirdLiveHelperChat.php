@@ -157,7 +157,7 @@ namespace LiveHelperChatExtension\messagebird\providers {
                             [
                                 "type"=> "video",
                                 "video"=> [
-                                    "url"=> (isset($component['example']['header_url'][0]) ? $component['example']['header_url'][0] : 'https://omni.enviosok.com/design/defaulttheme/images/general/logo.png'),
+                                    "url"=> (isset($component['example']['header_url'][0]) ? $component['example']['header_url'][0] : 'https://livehelperchat.com/design/frontendnew/images/lhc.png'),
                                 ]
                             ]
                         ]
@@ -169,7 +169,7 @@ namespace LiveHelperChatExtension\messagebird\providers {
                             [
                                 "type"=> "document",
                                 "document"=> [
-                                    "url"=> (isset($component['example']['header_url'][0]) ? $component['example']['header_url'][0] : 'https://omni.enviosok.com/design/defaulttheme/images/general/logo.png'),
+                                    "url"=> (isset($component['example']['header_url'][0]) ? $component['example']['header_url'][0] : 'https://livehelperchat.com/design/frontendnew/images/lhc.png'),
                                 ]
                             ]
                         ]
@@ -181,7 +181,7 @@ namespace LiveHelperChatExtension\messagebird\providers {
                             [
                                 "type"=> "image",
                                 "image"=> [
-                                    "url"=> (isset($component['example']['header_url'][0]) ? $component['example']['header_url'][0] : 'https://omni.enviosok.com/design/defaulttheme/images/general/logo.png'),
+                                    "url"=> (isset($component['example']['header_url'][0]) ? $component['example']['header_url'][0] : 'https://livehelperchat.com/design/frontendnew/images/lhc.png'),
                                 ]
                             ]
                         ]
@@ -243,6 +243,8 @@ namespace LiveHelperChatExtension\messagebird\providers {
 
                 $item->send_status_raw = json_encode($response);
                 $item->saveThis();
+
+                // Find any active chat by recipient and append message
 
             } catch (\Exception $e) {
                 $item->send_status_raw = json_encode($response) . $e->getTraceAsString() . $e->getMessage();

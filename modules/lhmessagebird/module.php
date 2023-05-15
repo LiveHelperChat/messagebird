@@ -11,6 +11,12 @@ $ViewList['index'] = array(
     'functions' => array('use_admin'),
 );
 
+$ViewList['indexwhatsapp'] = array(
+    'params' => array(),
+    'uparams' => array('action','csfr'),
+    'functions' => array('use_whatsapp'),
+);
+
 $ViewList['settings'] = array(
     'params' => array(),
     'uparams' => array(),
@@ -37,19 +43,19 @@ $ViewList['rawjson'] = array(
 $ViewList['send'] = array(
     'params' => array(),
     'uparams' => array(),
-    'functions' => array('use_admin'),
+    'functions' => array('use_whatsapp'),
 );
 
 $ViewList['massmessage'] = array(
     'params' => array(),
     'uparams' => array(),
-    'functions' => array('use_admin'),
+    'functions' => array('use_whatsapp'),
 );
 
 $ViewList['rendersend'] = array(
     'params' => array('template'),
     'uparams' => array(),
-    'functions' => array('use_admin'),
+    'functions' => array('use_whatsapp'),
 );
 
 $ViewList['templates'] = array(
@@ -107,4 +113,5 @@ $ViewList['deletesmsmessage'] = array(
 );
 
 $FunctionList['use_admin'] = array('explain' => 'Allow operator to use MessageBird');
+$FunctionList['use_whatsapp'] = array('explain' => 'Allow operator to use MessageBird WhatsApp Send Messages functions');
 $FunctionList['configure'] = array('explain' => 'Allow operator to configure MessageBird');
