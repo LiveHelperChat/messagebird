@@ -111,6 +111,8 @@ class erLhcoreClassExtensionMessagebird
 
             $messageBird->conversation_id = $params['data']['message']['conversationId'];
 
+            $previousStatus = $messageBird->status;
+
             if ($messageBird->status != LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_READ) {
                 $messageBird->status = $statusMap[$params['data']['message']['status']];
             }
@@ -123,7 +125,14 @@ class erLhcoreClassExtensionMessagebird
 
             // Append as a message to active chat once message is delivered
             // Happens if an operator sends another message during active conversation
-            if ($messageBird->status == \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_DELIVERED) {
+            if (
+                $messageBird->status == \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_DELIVERED ||
+                (
+                    $previousStatus != LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_READ &&
+                    $previousStatus != \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_DELIVERED &&
+                    $messageBird->status == \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_READ
+                )
+            ) {
 
                 $incomingWebhook = \erLhcoreClassModelChatIncomingWebhook::findOne(['filter' => ['name' => 'MessageBirdWhatsApp']]);
 
