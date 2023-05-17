@@ -1,7 +1,17 @@
-<?php /*
-<pre>
-    <?php print_r($template);?>
-</pre>*/ ?>
+<div class="accordion mb-2" id="accordionExample">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                Show the code
+            </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <pre><?php print_r($template);?></pre>
+            </div>
+        </div>
+    </div>
+</div>
 
 <h6><?php echo htmlspecialchars($template['name'])?> <span class="badge bg-secondary"><?php echo htmlspecialchars($template['category'])?></span></h6>
 <?php $fieldsCount = 0;?>
@@ -20,6 +30,13 @@
                 <span class="badge bg-secondary">VIDEO: <?php echo htmlspecialchars($component['example']['header_url'][0])?></span>
             </div>
         <?php endif; ?>
+
+        <?php if ($component['type'] == 'HEADER' && $component['format'] == 'TEXT') : ?>
+            <div>
+                <h5><?php echo htmlspecialchars($component['text'])?></h5>
+            </div>
+        <?php endif; ?>
+
     <?php endforeach; ?>
     <?php foreach ($template['components'] as $component) : ?>
         <?php if ($component['type'] == 'BODY') :

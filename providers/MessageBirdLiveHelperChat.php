@@ -131,6 +131,7 @@ namespace LiveHelperChatExtension\messagebird\providers {
             $bodyArguments = [];
 
             $bodyText = '';
+            $headerText = '';
             foreach ($templatePresent['components'] as $component) {
                 if ($component['type'] == 'BODY') {
                     $bodyText = $component['text'];
@@ -174,6 +175,8 @@ namespace LiveHelperChatExtension\messagebird\providers {
                             ]
                         ]
                     ];
+                } elseif ($component['type'] == 'HEADER' && $component['format'] == 'TEXT') {
+                    $headerText = '[fs16][b]' . $component['text'] . "[/b][/fs]\n";
                 } elseif ($component['type'] == 'HEADER' && $component['format'] == 'IMAGE') {
                     $bodyArguments[] = [
                         "type" => "header",
@@ -189,7 +192,7 @@ namespace LiveHelperChatExtension\messagebird\providers {
                 }
             }
 
-            $item->message = $bodyText;
+            $item->message = trim($headerText . $bodyText);
 
             $messageVariables = $item->message_variables_array;
 
