@@ -19,8 +19,12 @@ namespace LiveHelperChatExtension\messagebird\providers {
             $mbOptions = \erLhcoreClassModelChatConfig::fetch('mb_options');
             $data = (array)$mbOptions->data;
 
-            if (!isset($data['access_key']) || empty($data['access_key'])) {
-                throw new \Exception('Access Key is not set!',100);
+            if (isset($data['access_key_sms']) && !empty($data['access_key_sms'])) {
+                $this->access_key_sms = $data['access_key_sms'];
+            }
+
+            if (isset($data['access_key']) && !empty($data['access_key'])) {
+                $this->access_key = $data['access_key'];
             }
 
             if (!isset($data['endpoint']) || empty($data['endpoint'])) {
@@ -40,7 +44,6 @@ namespace LiveHelperChatExtension\messagebird\providers {
             }
 
             $this->endpoint = $data['endpoint'];
-            $this->access_key = $data['access_key'];
             $this->namespace = $data['namespace'];
             $this->channel_id = $data['channel_id'];
             $this->convendpoint = $data['convendpoint'];
@@ -74,7 +77,8 @@ namespace LiveHelperChatExtension\messagebird\providers {
                         'originator' => ($item->originator != '' ? $item->originator : $item->sender_phone->phone),
                         'recipients' => $item->phone,
                         'reference'  => 'verification'
-                    ])
+                    ]),
+                    'access_key' => $this->access_key_sms
                 ];
 
                 $response = $this->getRestAPI($paramsRequest);
@@ -294,7 +298,7 @@ namespace LiveHelperChatExtension\messagebird\providers {
 
                 $headers = array(
                     'Accept: application/json',
-                    'Authorization: AccessKey ' . $this->access_key
+                    'Authorization: AccessKey ' . (isset($params['access_key']) ? $params['access_key'] : $this->access_key)
                 );
 
                 if (isset($params['body_json']) && !empty($params['body_json'])) {
