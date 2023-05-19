@@ -47,7 +47,7 @@ if (ezcInputForm::hasPostData()) {
     $Errors = array();
 
     if ($form->hasValidData( 'phone' ) && $form->phone != '') {
-        $item->phone = $form->phone;
+        $item->phone = trim((int)str_replace('+','',$form->phone));
     } else {
         $Errors[] = erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Please enter a phone');
     }
@@ -80,12 +80,17 @@ if (ezcInputForm::hasPostData()) {
     if (count($Errors) == 0) {
         try {
 
-            LiveHelperChatExtension\messagebird\providers\MessageBirdLiveHelperChat::getInstance()->sendTemplate($item, $templates);
+            \LiveHelperChatExtension\messagebird\providers\MessageBirdLiveHelperChat::getInstance()->sendTemplate($item, $templates, false);
             
             $item->user_id = $currentUser->getUserID();
             $item->saveThis();
 
-            $tpl->set('updated',true);
+            if ($item->status == \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_FAILED) {
+                $tpl->set('errors', array($item->send_status_raw));
+            } else {
+                $tpl->set('updated', true);
+            }
+
         } catch (Exception $e) {
             $tpl->set('errors',array($e->getMessage()));
         }

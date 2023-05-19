@@ -53,3 +53,5 @@ CREATE TABLE `lhc_messagebird_sms_message` (
                                            KEY `mb_id_message` (`mb_id_message`),
                                            KEY `status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `lhc_messagebird_tmpl_disabled` (`id` bigint(20) unsigned NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

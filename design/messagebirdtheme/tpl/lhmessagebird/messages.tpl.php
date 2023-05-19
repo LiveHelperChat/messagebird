@@ -12,6 +12,7 @@
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','User');?></th>
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Phone');?></th>
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Send status');?></th>
+            <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Created at');?></th>
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Chat ID');?></th>
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Initiator');?></th>
             <th width="1%"></th>
@@ -62,6 +63,9 @@
                     <?php elseif ($item->status == \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_SENT) : ?>
                         <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Sent');?>
                     <?php endif; ?>
+                </td>
+                <td title="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Last update of the record was');?> - <?php echo $item->updated_at_ago?> <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','ago');?>">
+                    <?php echo htmlspecialchars($item->created_at_front)?>
                 </td>
                 <td>
                     <?php if ($item->conversation_id != '') : ?>

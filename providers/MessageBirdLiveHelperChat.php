@@ -117,7 +117,7 @@ namespace LiveHelperChatExtension\messagebird\providers {
             }
         }
 
-        public function sendTemplate($item, $templates = []) {
+        public function sendTemplate($item, $templates = [], $detailedLog = true) {
 
             $argumentsTemplate = [];
 
@@ -250,7 +250,13 @@ namespace LiveHelperChatExtension\messagebird\providers {
                 // Find any active chat by recipient and append message
 
             } catch (\Exception $e) {
-                $item->send_status_raw = json_encode($response) . $e->getTraceAsString() . $e->getMessage();
+
+                if ($detailedLog === true) {
+                    $item->send_status_raw = json_encode($response) . "\n" . $e->getTraceAsString() . "\n" . $e->getMessage();
+                } else {
+                    $item->send_status_raw = json_encode($response)  . "\n" . $e->getMessage();
+                }
+
                 $item->status = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_FAILED;
                 $item->saveThis();
             }

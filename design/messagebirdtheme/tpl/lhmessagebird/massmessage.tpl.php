@@ -35,7 +35,7 @@
                 <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Template');?>*</label>
                 <select name="template" class="form-control form-control-sm" id="template-to-send">
                     <option value=""><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Choose a template');?></option>
-                    <?php foreach (LiveHelperChatExtension\messagebird\providers\MessageBirdLiveHelperChat::getInstance()->getTemplates()['items'] as $template) : ?>
+                    <?php foreach (LiveHelperChatExtension\messagebird\providers\MessageBirdLiveHelperChat::getInstance()->getTemplates()['items'] as $template) : if (\LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdTemplateDisabled::getCount(['filter' => ['id' => $template['id']]]) > 0) {continue;}?>
                         <option <?php if ($send->template == $template['name']) : ?>selected="selected"<?php endif;?> value="<?php echo htmlspecialchars($template['name'] . '||' . $template['language'])?>"><?php echo htmlspecialchars($template['name'] . ' [' . $template['language'] . ']')?></option>
                     <?php endforeach; ?>
                 </select>

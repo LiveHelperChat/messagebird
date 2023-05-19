@@ -60,7 +60,7 @@ $ViewList['rendersend'] = array(
 
 $ViewList['templates'] = array(
     'params' => array(),
-    'uparams' => array(),
+    'uparams' => array('id','action','checked'),
     'functions' => array('use_whatsapp_manage'),
 );
 

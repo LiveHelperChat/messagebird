@@ -81,7 +81,7 @@ if (isset($_POST['UploadFileAction'])) {
             foreach ($data as $item) {
                 $messagePrepared = new \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage();
                 $messagePrepared->user_id = $currentUser->getUserID();
-                $messagePrepared->phone = str_replace('+','',$item['phone']);
+                $messagePrepared->phone = trim(str_replace('+','',$item['phone']));
                 unset($item['phone']);
                 $messagePrepared->message_variables = json_encode($item);
                 $messagePrepared->template = $itemDefault->template;
