@@ -34,13 +34,16 @@ class erLhcoreClassExtensionMessagebird
                 $params['chat']->dep_id = $messageBird->dep_id;
                 $params['chat']->updateThis(['update' => ['dep_id']]);
 
-                // Save template message first before saving initial response in the lhc core
-                $msg = new erLhcoreClassModelmsg();
-                $msg->msg = $messageBird->message;
-                $msg->chat_id = $params['chat']->id;
-                $msg->user_id = $messageBird->user_id;
-                $msg->time = $messageBird->created_at;
-                erLhcoreClassChat::getSession()->save($msg);
+                // Save template only if it was not assigned to any chat yet
+                if ($messageBird->chat_id == 0) {
+                    // Save template message first before saving initial response in the lhc core
+                    $msg = new erLhcoreClassModelmsg();
+                    $msg->msg = $messageBird->message;
+                    $msg->chat_id = $params['chat']->id;
+                    $msg->user_id = $messageBird->user_id;
+                    $msg->time = $messageBird->created_at;
+                    erLhcoreClassChat::getSession()->save($msg);
+                }
 
                 // Update message bird
                 $messageBird->chat_id = $params['chat']->id;
