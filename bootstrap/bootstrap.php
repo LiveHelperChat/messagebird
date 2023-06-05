@@ -27,15 +27,16 @@ class erLhcoreClassExtensionMessagebird
             isset($params['data']['message']['platform']) &&
             $params['data']['message']['platform'] == 'whatsapp'
         ) {
-            $messageBird = LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::findOne(['sort' => 'id DESC', 'filter' => ['conversation_id' => $params['data']['message']['conversationId']]]);
+            $messageBird = LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::findOne(['sort' => 'id DESC', 'filtergt' => ['created_at' => (time() - 24 * 3600)], 'filter' => ['conversation_id' => $params['data']['message']['conversationId']]]);
 
             if (is_object($messageBird) && $messageBird->dep_id > 0) {
-                // Chat
-                $params['chat']->dep_id = $messageBird->dep_id;
-                $params['chat']->updateThis(['update' => ['dep_id']]);
 
                 // Save template only if it was not assigned to any chat yet
                 if ($messageBird->chat_id == 0) {
+                    // Chat
+                    $params['chat']->dep_id = $messageBird->dep_id;
+                    $params['chat']->updateThis(['update' => ['dep_id']]);
+
                     // Save template message first before saving initial response in the lhc core
                     $msg = new erLhcoreClassModelmsg();
                     $msg->msg = $messageBird->message;
