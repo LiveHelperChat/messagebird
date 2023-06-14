@@ -177,7 +177,48 @@ class erLhcoreClassExtensionMessagebird
             // We do not need to do anything else with these type of messages
             exit;
             
+        } else if (isset($params['data']['message']['id']) &&
+            isset($params['data']['message']['platform']) &&
+            isset($params['data']['message']['type']) &&
+            $params['data']['message']['platform'] == 'whatsapp' &&
+            $params['data']['type'] == 'message.updated') {
+
+            $incomingChat = erLhcoreClassModelChatIncoming::findOne(array('filter' => array('chat_external_id' => $params['data']['message']['conversationId'])));
+
+            // Chat was found, now we need to find exact message
+            if ($incomingChat instanceof erLhcoreClassModelChatIncoming && is_object($incomingChat->chat)) {
+                $statusMap = [
+                    'pending' => erLhcoreClassModelmsg::STATUS_PENDING,
+                    'sent' => erLhcoreClassModelmsg::STATUS_SENT,
+                    'delivered' => erLhcoreClassModelmsg::STATUS_DELIVERED,
+                    'read' =>  erLhcoreClassModelmsg::STATUS_READ,
+                    'rejected' =>  erLhcoreClassModelmsg::STATUS_REJECTED
+                ];
+                $msg = erLhcoreClassModelmsg::findOne(['filter' => ['chat_id' => $incomingChat->chat->id], 'customfilter' => ['`meta_msg` != \'\' AND JSON_EXTRACT(meta_msg,\'$.iwh_msg_id\') = ' . ezcDbInstance::get()->quote($params['data']['message']['id'])]]);
+
+                if (is_object($msg) && $msg->del_st != erLhcoreClassModelmsg::STATUS_READ) {
+
+                    $msg->del_st = max($statusMap[$params['data']['message']['status']],$msg->del_st);
+                    $msg->updateThis(['update' => ['del_st']]);
+
+                    // Refresh message delivery status for op
+                    $chat = $incomingChat->chat;
+                    $chat->operation_admin .= "lhinst.updateMessageRowAdmin({$msg->chat_id},{$msg->id});";
+                    if ($msg->del_st == erLhcoreClassModelmsg::STATUS_READ) {
+                        $chat->has_unread_op_messages = 0;
+                    }
+                    $chat->updateThis(['update' => ['operation_admin','has_unread_op_messages']]);
+
+                    // NodeJS to update message delivery status
+                    erLhcoreClassChatEventDispatcher::getInstance()->dispatch('chat.message_updated', array('msg' => & $msg, 'chat' => & $chat));
+                }
+            }
+            exit;
+
         } else if ($params['webhook']->scope == 'messagebirdsms' && isset($_GET['status']) && isset($_GET['id'])) {
+
+            erLhcoreClassLog::write(print_r($_GET,true));
+            erLhcoreClassLog::write(print_r($_POST,true));
 
             $lastMessage = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::findOne([
                 'filter' => [
@@ -185,61 +226,90 @@ class erLhcoreClassExtensionMessagebird
                 ]
             ]);
 
-            if (!is_object($lastMessage)) {
-                // We do not need to do anything else with these type of messages
-                exit;
-            }
+            if (is_object($lastMessage)) {
+                $statusMap = [
+                    'pending' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_PENDING,
+                    'sent' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_SENT,
+                    'delivered' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_DELIVERED,
+                    'buffered' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_BUFFERED,
+                    'expired' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_EXPIRED,
+                    'delivery_failed' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_FAILED,
+                    'scheduled' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_SCHEDULED,
+                ];
 
-            $statusMap = [
-                 'pending' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_PENDING,
-                 'sent' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_SENT,
-                 'delivered' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_DELIVERED,
-                 'buffered' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_BUFFERED,
-                 'expired' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_EXPIRED,
-                 'delivery_failed' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_FAILED,
-                 'scheduled' => \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_SCHEDULED,
-            ];
+                if (isset($statusMap[(string)$_GET['status']])) {
+                    $lastMessage->status = $statusMap[(string)$_GET['status']];
+                    $lastMessage->status_txt = mb_substr((string)$_GET['statusReason'], 0, 100);
+                    $lastMessage->updateThis(['update' => ['status','status_txt']]);
+                }
 
-            if (isset($statusMap[(string)$_GET['status']])) {
-                $lastMessage->status = $statusMap[(string)$_GET['status']];
-                $lastMessage->status_txt = mb_substr((string)$_GET['statusReason'], 0, 100);
-                $lastMessage->updateThis(['update' => ['status','status_txt']]);
-            }
+                // Insert message as a normal message to the last chat customer had
+                // In case there is chosen reopen old chat
+                // Which by the case is the default option of the extension
+                if (in_array($lastMessage->status,[
+                        \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_DELIVERED
+                    ]) && $lastMessage->chat_id == 0) {
 
-            // Insert message as a normal message to the last chat customer had
-            // In case there is chosen reopen old chat
-            // Which by the case is the default option of the extension
-            if (in_array($lastMessage->status,[
-                    \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::STATUS_DELIVERED
-                ]) && $lastMessage->chat_id == 0) {
+                    $presentConversation = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::findOne([
+                        'filter' => [
+                            'sender_phone_id' => $lastMessage->sender_phone_id,
+                            'phone' => $lastMessage->phone
+                        ],
+                        'filternot' => [
+                            'chat_id' => 0
+                        ],
+                        'sort' => '`id` DESC'
+                    ]);
 
-                $presentConversation = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::findOne([
-                    'filter' => [
-                        'sender_phone_id' => $lastMessage->sender_phone_id,
-                        'phone' => $lastMessage->phone
-                    ],
-                    'filternot' => [
-                        'chat_id' => 0
-                    ],
-                    'sort' => '`id` DESC'
-                ]);
+                    if (is_object($presentConversation)) {
 
-                if (is_object($presentConversation)) {
+                        $chat = erLhcoreClassModelChat::fetch($presentConversation->chat_id);
 
-                    $chat = erLhcoreClassModelChat::fetch($presentConversation->chat_id);
+                        if (is_object($chat)) {
+                            // Save template message first before saving initial response in the lhc core
+                            $msg = new erLhcoreClassModelmsg();
+                            $msg->msg = $lastMessage->message;
+                            $msg->chat_id = $presentConversation->chat_id;
+                            $msg->user_id = $lastMessage->user_id;
+                            $msg->time = $lastMessage->created_at;
+                            erLhcoreClassChat::getSession()->save($msg);
 
-                    if (is_object($chat)) {
-                        // Save template message first before saving initial response in the lhc core
-                        $msg = new erLhcoreClassModelmsg();
-                        $msg->msg = $lastMessage->message;
-                        $msg->chat_id = $presentConversation->chat_id;
-                        $msg->user_id = $lastMessage->user_id;
-                        $msg->time = $lastMessage->created_at;
-                        erLhcoreClassChat::getSession()->save($msg);
-
-                        $chat->last_msg_id = $msg->id;
-                        $chat->updateThis(['update' => ['last_msg_id']]);
+                            $chat->last_msg_id = $msg->id;
+                            $chat->updateThis(['update' => ['last_msg_id']]);
+                        }
                     }
+                }
+            }
+
+            // Track message status on normal flow
+            if (isset($_GET['reference']) && is_numeric($_GET['reference'])) {
+                $statusMap = [
+                    'pending' => \erLhcoreClassModelmsg::STATUS_PENDING,
+                    'sent' => \erLhcoreClassModelmsg::STATUS_SENT,
+                    'delivered' => \erLhcoreClassModelmsg::STATUS_READ,
+                    'buffered' => \erLhcoreClassModelmsg::STATUS_PENDING,
+                    'expired' => \erLhcoreClassModelmsg::STATUS_REJECTED,
+                    'delivery_failed' => \erLhcoreClassModelmsg::STATUS_REJECTED,
+                    'scheduled' => \erLhcoreClassModelmsg::STATUS_PENDING,
+                ];
+
+                $msg = erLhcoreClassModelmsg::findOne(['filter' => ['chat_id' => (int)$_GET['reference']], 'customfilter' => ['`meta_msg` != \'\' AND JSON_EXTRACT(meta_msg,\'$.iwh_msg_id\') = ' . ezcDbInstance::get()->quote((string)$_GET['id'])]]);
+
+                if (is_object($msg) && $msg->del_st != erLhcoreClassModelmsg::STATUS_READ) {
+
+                    $msg->del_st = max($statusMap[(string)$_GET['status']],$msg->del_st);
+                    $msg->updateThis(['update' => ['del_st']]);
+
+                    // Refresh message delivery status for op
+                    $chat = erLhcoreClassModelChat::fetch($msg->chat_id);
+                    $chat->operation_admin .= "lhinst.updateMessageRowAdmin({$msg->chat_id},{$msg->id});";
+                    if ($msg->del_st == erLhcoreClassModelmsg::STATUS_READ) {
+                        $chat->has_unread_op_messages = 0;
+                    }
+                    $chat->updateThis(['update' => ['operation_admin','has_unread_op_messages']]);
+
+                    // NodeJS to update message delivery status
+                    erLhcoreClassChatEventDispatcher::getInstance()->dispatch('chat.message_updated', array('msg' => & $msg, 'chat' => & $chat));
                 }
             }
 
