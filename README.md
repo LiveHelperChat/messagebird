@@ -2,6 +2,10 @@
 
 MessageBird whatsapp template sending functionality.
 
+# Requirements
+
+Min 4.26 Live Helper Chat version.
+
 # Install
 
 Install database
