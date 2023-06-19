@@ -217,9 +217,6 @@ class erLhcoreClassExtensionMessagebird
 
         } else if ($params['webhook']->scope == 'messagebirdsms' && isset($_GET['status']) && isset($_GET['id'])) {
 
-            erLhcoreClassLog::write(print_r($_GET,true));
-            erLhcoreClassLog::write(print_r($_POST,true));
-
             $lastMessage = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdSMSMessage::findOne([
                 'filter' => [
                     'mb_id_message' => (string)$_GET['id'],
