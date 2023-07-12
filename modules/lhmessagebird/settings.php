@@ -30,6 +30,9 @@ if (isset($_POST['StoreOptions'])) {
         ),
         'namespace' => new ezcInputFormDefinitionElement(
             ezcInputFormDefinitionElement::OPTIONAL, 'unsafe_raw'
+        ),
+        'alert_email' => new ezcInputFormDefinitionElement(
+            ezcInputFormDefinitionElement::OPTIONAL, 'unsafe_raw'
         )
     );
 
@@ -70,6 +73,12 @@ if (isset($_POST['StoreOptions'])) {
         $data['namespace'] = $form->namespace;
     } else {
         $data['namespace'] = '';
+    }
+    
+    if ( $form->hasValidData( 'alert_email' )) {
+        $data['alert_email'] = $form->alert_email;
+    } else {
+        $data['alert_email'] = '';
     }
 
     $mbOptions->explain = '';

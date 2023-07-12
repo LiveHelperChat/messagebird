@@ -46,6 +46,21 @@
         <input type="text" name="access_key_sms" class="form-control form-control-sm" value="<?php isset($mb_options['access_key_sms']) ? print htmlspecialchars($mb_options['access_key_sms']) : ''?>" />
     </div>
 
+    <hr>
+
+    <div class="form-group">
+        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Alert e-mail'); ?></label>
+        <input type="text" name="alert_email" class="form-control form-control-sm" value="<?php isset($mb_options['alert_email']) ? print htmlspecialchars($mb_options['alert_email']) : ''?>" />
+        <p><small><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','To this e-mail we will send an alert indicating there is a problem with messages delivery. If 5 or more times accours'); ?></small></p>
+        <?php if (isset($mb_options['fail_sent']) && $mb_options['fail_sent'] == 1) : ?>
+            <span class="badge bg-info"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Alert was sent!'); ?></span>
+        <?php endif; ?>
+
+        <?php if (isset($mb_options['fail_counter'])): ?>
+            <span class="badge bg-info"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Failure counter - '); ?><?php echo (int)$mb_options['fail_counter']?></span>
+        <?php endif; ?>
+    </div>
+
     <button name="StoreOptions" class="btn btn-sm btn-secondary" type="submit"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Save'); ?></button>
 
 </form>

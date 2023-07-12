@@ -123,6 +123,13 @@ class erLhcoreClassExtensionMessagebird
 
             if ($messageBird->status == LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_REJECTED) {
                 $messageBird->send_status_raw = $messageBird->send_status_raw . json_encode($params['data']);
+                self::processRejected($params['data']);
+            } elseif (
+                $messageBird->status == LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_SENT ||
+                $messageBird->status == LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_DELIVERED ||
+                $messageBird->status == LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_READ
+            ) {
+                self::processSent($params['data']);
             }
 
             $messageBird->saveThis();
@@ -312,6 +319,47 @@ class erLhcoreClassExtensionMessagebird
 
             // We do not need to do anything else with these type of messages
             exit;
+        }
+    }
+
+    public static function processRejected($dataRejection) {
+        $mbOptions = erLhcoreClassModelChatConfig::fetch('mb_options');
+        $data = (array)$mbOptions->data;
+        if (!isset($data['fail_counter'])) {
+            $data['fail_counter'] = 0;
+        }
+        $data['fail_counter']++;
+
+        if (isset($data['alert_email']) && $data['alert_email'] != '' && $data['fail_counter'] >= 5 && (!isset($data['fail_sent']) || $data['fail_sent'] == 0)) {
+            $mail = new PHPMailer();
+            $mail->CharSet = "UTF-8";
+            $mail->FromName = 'Live Helper Chat MessageBird';
+            $mail->Subject = 'Live Helper Chat MessageBird Sent Failure';
+            $mail->Body = "Error message - \n" . json_encode($dataRejection, JSON_PRETTY_PRINT);
+
+            $emailRecipient = explode(',',$data['alert_email']);
+
+            foreach ($emailRecipient as $receiver) {
+                $mail->AddAddress( trim($receiver) );
+            }
+
+            erLhcoreClassChatMail::setupSMTP($mail);
+            $mail->Send();
+            $data['fail_sent'] = 1;
+        }
+
+        $mbOptions->value = serialize($data);
+        $mbOptions->saveThis();
+    }
+
+    public static function processSent($dataSent) {
+        $mbOptions = erLhcoreClassModelChatConfig::fetch('mb_options');
+        $data = (array)$mbOptions->data;
+        if (isset($data['fail_counter']) && $data['fail_counter'] > 0) {
+            $data['fail_counter'] = 0;
+            $data['fail_sent'] = 0;
+            $mbOptions->value = serialize($data);
+            $mbOptions->saveThis();
         }
     }
 
