@@ -25,7 +25,7 @@ $filterWithoutSort = $filterParams['filter'];
 unset($filterWithoutSort['sort']);
 
 if (empty($filterWithoutSort) && method_exists('\LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdAccount','estimateRows')) {
-    $rowsNumber = ($rowsNumber = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageFBWhatsAppAccount::estimateRows()) && $rowsNumber > 10000 ? $rowsNumber : null;
+    $rowsNumber = ($rowsNumber = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdAccount::estimateRows()) && $rowsNumber > 10000 ? $rowsNumber : null;
 }
 
 $pages = new lhPaginator();
