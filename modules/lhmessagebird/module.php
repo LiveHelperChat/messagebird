@@ -29,6 +29,42 @@ $ViewList['messages'] = array(
     'functions' => array('use_whatsapp_manage'),
 );
 
+$ViewList['webhooks'] = array(
+    'params' => array(),
+    'uparams' => array('business_account_id'),
+    'functions' => array('use_whatsapp_manage'),
+);
+
+$ViewList['deletewebhook'] = array(
+    'params' => array('id','business_account_id'),
+    'uparams' => array('csfr'),
+    'functions' => array('use_whatsapp_manage'),
+);
+
+$ViewList['account'] = array(
+    'params' => array(),
+    'uparams' => array(),
+    'functions' => array('use_whatsapp_manage'),
+);
+
+$ViewList['newaccount'] = array(
+    'params' => array(),
+    'uparams' => array(),
+    'functions' => array('use_whatsapp_manage'),
+);
+
+$ViewList['editaccount'] = array(
+    'params' => array('id'),
+    'uparams' => array(),
+    'functions' => array('use_whatsapp_manage'),
+);
+
+$ViewList['deleteaccount'] = array(
+    'params' => array('id'),
+    'uparams' => array('csfr'),
+    'functions' => array('use_whatsapp_manage'),
+);
+
 $ViewList['deletemessage'] = array(
     'params' => array('id'),
     'functions' => array('use_whatsapp_manage'),
@@ -42,18 +78,24 @@ $ViewList['rawjson'] = array(
 
 $ViewList['send'] = array(
     'params' => array(),
-    'uparams' => array(),
+    'uparams' => array('business_account_id'),
     'functions' => array('use_whatsapp'),
 );
 
 $ViewList['massmessage'] = array(
     'params' => array(),
-    'uparams' => array(),
+    'uparams' => array('business_account_id'),
     'functions' => array('use_whatsapp'),
 );
 
 $ViewList['rendersend'] = array(
-    'params' => array('template'),
+    'params' => array('template','business_account_id'),
+    'uparams' => array(),
+    'functions' => array('use_whatsapp'),
+);
+
+$ViewList['rendertemplates'] = array(
+    'params' => array('business_account_id'),
     'uparams' => array(),
     'functions' => array('use_whatsapp'),
 );

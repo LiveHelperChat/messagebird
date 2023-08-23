@@ -32,7 +32,8 @@ class erLhcoreClassModelMessageBirdMessage
             'dep_id' => $this->dep_id,
             'initiation' => $this->initiation,
             'conversation_id' => $this->conversation_id,
-            'message_variables' => $this->message_variables
+            'message_variables' => $this->message_variables,
+            'business_account_id' => $this->business_account_id
         );
     }
 
@@ -94,6 +95,17 @@ class erLhcoreClassModelMessageBirdMessage
                 }
                 return $this->message_variables_array;
 
+            case 'business_account':
+                $this->business_account = null;
+                if ($this->business_account_id > 0) {
+                    try {
+                        $this->business_account = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdAccount::fetch($this->business_account_id);
+                    } catch (\Exception $e) {
+
+                    }
+                }
+                return $this->business_account;
+
             default:
                 ;
                 break;
@@ -119,6 +131,7 @@ class erLhcoreClassModelMessageBirdMessage
     public $updated_at = 0;
     public $status = self::STATUS_PENDING;
     public $user_id = 0;
+    public $business_account_id = 0;
     public $template = '';
     public $language = '';
     public $mb_id_message = '';

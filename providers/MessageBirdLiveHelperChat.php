@@ -49,11 +49,67 @@ namespace LiveHelperChatExtension\messagebird\providers {
             $this->convendpoint = $data['convendpoint'];
         }
 
+        public function setAccessKey($access_key)
+        {
+            if ($access_key != '') {
+                $this->access_key = $access_key;
+            }
+        }
+
+        public function setChannelId($channel_id)
+        {
+            if ($channel_id != '') {
+                $this->channel_id = $channel_id;
+            }
+        }
+
+        public function setNamespace($namespace){
+            if ($namespace != '') {
+                $this->namespace = $namespace;
+            }
+        }
+
+        public function getChannelId()
+        {
+            return $this->channel_id;
+        }
+
         public function getTemplates() {
             return $this->getRestAPI([
                 'baseurl' => $this->endpoint,
                 'method' => 'v3/platforms/whatsapp/templates',
             ]);
+        }
+
+        public function getWebhooks() {
+            return $this->getRestAPI([
+                'baseurl' => 'https://conversations.messagebird.com',
+                'method' => 'v1/webhooks/',
+            ]);
+        }
+        
+        public function setWebhook($params) {
+            $paramsRequest = [
+                'baseurl' => 'https://conversations.messagebird.com/',
+                'method' => 'v1/webhooks/',
+                'body_json' => json_encode([
+                    'events' => ["message.created","message.updated"],
+                    'channelId' => $params['channel_id'],
+                    'url' => $params['url'],
+                    "settings" => ["expected_http_code" => "2xx"]
+                ]),
+            ];
+            $this->getRestAPI($paramsRequest);
+        }
+
+        public function deleteWebhook($id)
+        {
+            $paramsRequest = [
+                'baseurl' => 'https://conversations.messagebird.com/',
+                'method' => 'v1/webhooks/' . $id,
+                'method_type' => 'delete'
+            ];
+            $this->getRestAPI($paramsRequest);
         }
 
         public function getTemplate($name, $language) {

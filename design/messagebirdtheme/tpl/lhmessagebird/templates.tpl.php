@@ -1,6 +1,25 @@
 <h1><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Templates'); ?></h1>
 
-<?php $idsTemplate = []; foreach ($templates['items'] as $template) {
+<form action="" method="get">
+
+    <div class="form-group">
+        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','Business account');?></label>
+        <?php echo erLhcoreClassRenderHelper::renderCombobox( array (
+            'input_name'     => 'business_account_id',
+            'optional_field' => erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','Default configuration'),
+            'selected_id'    => $input->business_account_id,
+            'css_class'      => 'form-control form-control-sm',
+            'list_function'  => '\LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdAccount::getList'
+        )); ?>
+    </div>
+
+    <button class="btn btn-sm btn-secondary" type="submit" name="doSearch">Search</button>
+
+</form>
+
+<?php
+
+$idsTemplate = []; foreach ($templates['items'] as $template) {
     $idsTemplate[] = $template['id'];
 }
 
@@ -46,6 +65,6 @@ $records = !empty($idsTemplate) ? array_keys(\LiveHelperChatExtension\messagebir
 <script>
     $('.disable-template-action').change(function(){
         $('#save-status-'+$(this).val()).removeClass('hide');
-        $.post(WWW_DIR_JAVASCRIPT + 'messagebird/templates/(id)/'+$(this).val()+'/(action)/disable/(checked)/'+$(this).is(':checked'))
+        $.post(WWW_DIR_JAVASCRIPT + 'messagebird/templates/(id)/'+$(this).val()+'/(business_account_id)/'+$('#id_business_account_id').val()+'/(action)/disable/(checked)/'+$(this).is(':checked'))
     })
 </script>

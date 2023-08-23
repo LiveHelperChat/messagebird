@@ -21,7 +21,10 @@ try {
 }
 
 if (!empty($chatsId)) {
-    $templates = LiveHelperChatExtension\messagebird\providers\MessageBirdLiveHelperChat::getInstance()->getTemplates();
+    
+    $instance = LiveHelperChatExtension\messagebird\providers\MessageBirdLiveHelperChat::getInstance();
+
+    $templatesCache = [];
 
     // Delete indexed chat's records
     $stmt = $db->prepare('UPDATE lhc_messagebird_message SET status = :status WHERE id IN (' . implode(',', $chatsId) . ')');
@@ -33,7 +36,22 @@ if (!empty($chatsId)) {
 
     if (!empty($messages)) {
         foreach ($messages as $message) {
-            LiveHelperChatExtension\messagebird\providers\MessageBirdLiveHelperChat::getInstance()->sendTemplate($message, $templates);
+            
+            if ($message->business_account_id > 0 && is_object($message->business_account)) {
+
+                // Override variables by account
+                $instance->setAccessKey($message->business_account->access_key);
+                $instance->setChannelId($message->business_account->channel_id);
+                $instance->setNamespace($message->business_account->template_id_namespace);
+
+                $templates = isset($templatesCache[$message->business_account_id]) ? $templatesCache[$message->business_account_id] : $instance->getTemplates();
+                $templatesCache[$message->business_account_id] = $templates;
+            } else {
+                $templates = isset($templatesCache[0]) ? $templatesCache[0] : $instance->getTemplates();
+                $templatesCache[0] = $templates;
+            }
+
+            $instance->sendTemplate($message, $templates);
         }
     }
 

@@ -24,7 +24,9 @@
     <?php endif; ?>
 
     <?php if (erLhcoreClassUser::instance()->hasAccessTo('lhmessagebird','use_whatsapp_manage')) : ?>
-    <li><a href="<?php echo erLhcoreClassDesign::baseurl('messagebird/messages')?>"><span class="material-icons">chat</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','WhatsApp Messages');?></a></li>
+        <li><a href="<?php echo erLhcoreClassDesign::baseurl('messagebird/messages')?>"><span class="material-icons">chat</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','WhatsApp Messages');?></a></li>
+        <li><a href="<?php echo erLhcoreClassDesign::baseurl('messagebird/account')?>"><span class="material-icons">call</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','WhatsApp Numbers');?></a></li>
+        <li><a href="<?php echo erLhcoreClassDesign::baseurl('messagebird/webhooks')?>"><span class="material-icons">webhook</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','WhatsApp Webhooks');?></a></li>
     <?php endif; ?>
 </ul>
 <?php endif; ?>

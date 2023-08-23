@@ -17,6 +17,14 @@
         "default": null,
         "extra": "",
         "collation": "utf8mb4_unicode_ci"
+      },
+      {
+        "field": "business_account_id",
+        "type": "bigint(20) unsigned",
+        "null": "NO",
+        "key": "",
+        "default": "0",
+        "extra": ""
       }
     ],
     "lhc_messagebird_tmpl_disabled": [
@@ -48,6 +56,16 @@
         "default": null,
         "extra": ""
       }
+    ],
+    "lhc_messagebird_account": [
+      {
+        "field": "id",
+        "type": "int(11) unsigned",
+        "null": "NO",
+        "key": "UNI",
+        "default": null,
+        "extra": ""
+      }
     ]
   },
   "tables_data": {    },
@@ -64,7 +82,8 @@
     "lhc_messagebird_message" : "CREATE TABLE `lhc_messagebird_message` (\n  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,\n  `user_id` bigint(20) unsigned NOT NULL,\n  `created_at` bigint(20) unsigned NOT NULL,\n  `updated_at` bigint(20) unsigned NOT NULL,\n  `phone` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `status` tinyint(1) unsigned NOT NULL DEFAULT 0,\n  `template` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `message` text COLLATE utf8mb4_unicode_ci NOT NULL,\n  `language` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `mb_id_message` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `send_status_raw` longtext COLLATE utf8mb4_unicode_ci NOT NULL,\n  `conversation_id` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `dep_id` bigint(20) unsigned NOT NULL,\n  `chat_id` bigint(20) unsigned NOT NULL, `message_variables` longtext COLLATE 'utf8mb4_unicode_ci' NOT NULL, `initiation` bigint(20) unsigned NOT NULL,\n  PRIMARY KEY (`id`),\n  KEY `mb_id_message` (`mb_id_message`), KEY `status` (`status`),\n  KEY `conversation_id` (`conversation_id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
     "lhc_messagebird_phone" : "CREATE TABLE `lhc_messagebird_phone` ( `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,`created_at` bigint(20) unsigned NOT NULL,`updated_at` bigint(20) unsigned NOT NULL, `name` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL, `phone` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,`dep_id` bigint(20) unsigned NOT NULL,PRIMARY KEY (`id`), KEY `phone` (`phone`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",
     "lhc_messagebird_sms_message" : "CREATE TABLE `lhc_messagebird_sms_message` (`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,`sender_phone_id` bigint(20) unsigned NOT NULL,`user_id` bigint(20) unsigned NOT NULL,`mb_id_message` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL, `created_at` bigint(20) unsigned NOT NULL,`updated_at` bigint(20) unsigned NOT NULL, `status_txt` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL, `phone` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,`status` tinyint(1) unsigned NOT NULL DEFAULT 0, `message` text COLLATE utf8mb4_unicode_ci NOT NULL, `send_status_raw` longtext COLLATE utf8mb4_unicode_ci NOT NULL,`dep_id` bigint(20) unsigned NOT NULL,`chat_id` bigint(20) unsigned NOT NULL, `message_variables` longtext COLLATE utf8mb4_unicode_ci NOT NULL, PRIMARY KEY (`id`), KEY `sender_phone_id` (`sender_phone_id`), KEY `status` (`status`), KEY `mb_id_message` (`mb_id_message`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",
-    "lhc_messagebird_tmpl_disabled" : "CREATE TABLE `lhc_messagebird_tmpl_disabled` (`id` bigint(20) unsigned NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"
+    "lhc_messagebird_tmpl_disabled" : "CREATE TABLE `lhc_messagebird_tmpl_disabled` (`id` bigint(20) unsigned NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",
+    "lhc_messagebird_account" : "CREATE TABLE `lhc_messagebird_account` (`id` int(11) unsigned NOT NULL AUTO_INCREMENT,`channel_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,`name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,`template_id_namespace` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,`access_key` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,`dep_id` bigint(20) unsigned NOT NULL,`created_at` bigint(20) unsigned NOT NULL,`updated_at` bigint(20) unsigned NOT NULL,`active` tinyint(1) unsigned NOT NULL DEFAULT 1,PRIMARY KEY (`id`),KEY `channel_id` (`channel_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"
   }
 }
 

@@ -15,6 +15,7 @@ CREATE TABLE `lhc_messagebird_message` (
                                            `chat_id` bigint(20) unsigned NOT NULL,
                                            `initiation` bigint(20) unsigned NOT NULL,
                                            `message_variables` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+                                           `business_account_id` bigint(20) unsigned NOT NULL DEFAULT 0,
                                            PRIMARY KEY (`id`),
                                            KEY `mb_id_message` (`mb_id_message`),
                                            KEY `conversation_id` (`conversation_id`),
@@ -55,3 +56,17 @@ CREATE TABLE `lhc_messagebird_sms_message` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `lhc_messagebird_tmpl_disabled` (`id` bigint(20) unsigned NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `lhc_messagebird_account` (
+                                           `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                                           `channel_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+                                           `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+                                           `template_id_namespace` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+                                           `access_key` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+                                           `dep_id` bigint(20) unsigned NOT NULL,
+                                           `created_at` bigint(20) unsigned NOT NULL,
+                                           `updated_at` bigint(20) unsigned NOT NULL,
+                                           `active` tinyint(1) unsigned NOT NULL DEFAULT 1,
+                                           PRIMARY KEY (`id`),
+                                           KEY `channel_id` (`channel_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

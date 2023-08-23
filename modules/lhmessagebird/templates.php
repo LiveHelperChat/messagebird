@@ -18,12 +18,24 @@ if ($Params['user_parameters_unordered']['action'] == 'disable') {
     exit;
 }
 
-
+if (isset($_GET['doSearch'])) {
+    $filterParams = erLhcoreClassSearchHandler::getParams(array('customfilterfile' => 'extension/messagebird/classes/filter/templates.php', 'format_filter' => true, 'use_override' => true, 'uparams' => $Params['user_parameters_unordered']));
+    $filterParams['is_search'] = true;
+} else {
+    $filterParams = erLhcoreClassSearchHandler::getParams(array('customfilterfile' => 'extension/messagebird/classes/filter/templates.php', 'format_filter' => true, 'uparams' => $Params['user_parameters_unordered']));
+    $filterParams['is_search'] = false;
+}
 
 $tpl = erLhcoreClassTemplate::getInstance('lhmessagebird/templates.tpl.php');
 
 try {
     $instance = LiveHelperChatExtension\messagebird\providers\MessageBirdLiveHelperChat::getInstance();
+
+    if (is_numeric($filterParams['input_form']->business_account_id) && $filterParams['input_form']->business_account_id > 0) {
+        $businessAccount = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdAccount::fetch($filterParams['input_form']->business_account_id);
+        $instance->setAccessKey($businessAccount->access_key);
+    }
+
     $templates = $instance->getTemplates();
 } catch (Exception $e) {
     $tpl->set('error', $e->getMessage());
@@ -31,6 +43,7 @@ try {
 }
 
 $tpl->set('templates', $templates);
+$tpl->set('input',$filterParams['input_form']);
 
 $Result['content'] = $tpl->fetch();
 

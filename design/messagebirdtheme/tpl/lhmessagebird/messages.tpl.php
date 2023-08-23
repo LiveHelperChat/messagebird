@@ -7,6 +7,7 @@
         <thead>
         <tr>
             <th width="1%"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','ID');?></th>
+            <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Account');?></th>
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Department');?></th>
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Template');?></th>
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','User');?></th>
@@ -22,6 +23,13 @@
             <tr>
                 <td nowrap="" title="<?php echo date(erLhcoreClassModule::$dateDateHourFormat,$item->created_at);?> | <?php echo htmlspecialchars($item->mb_id_message) ?> | <?php echo htmlspecialchars($item->conversation_id) ?>">
                     <?php echo htmlspecialchars($item->id) ?> <a class="material-icons" onclick="lhc.revealModal({'url':WWW_DIR_JAVASCRIPT+'messagebird/rawjson/<?php echo $item->id?>'})">info_outline</a>
+                </td>
+                <td>
+                    <?php if (is_object($item->business_account)) : ?>
+                        <?php echo htmlspecialchars((string)$item->business_account)?>
+                    <?php else : ?>
+                        <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','Default');?>
+                    <?php endif; ?>
                 </td>
                 <td>
                     <?php echo htmlspecialchars((string)$item->department)?>

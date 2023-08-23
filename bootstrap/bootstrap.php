@@ -12,6 +12,31 @@ class erLhcoreClassExtensionMessagebird
         $dispatcher = erLhcoreClassChatEventDispatcher::getInstance();
         $dispatcher->listen('chat.webhook_incoming', 'erLhcoreClassExtensionMessagebird::incommingWebhook');
         $dispatcher->listen('chat.webhook_incoming_chat_started', 'erLhcoreClassExtensionMessagebird::incommingChatStarted');
+        $dispatcher->listen('chat.incoming_dynamic_array', 'erLhcoreClassExtensionMessagebird::incomingChatDynamicArray');
+    }
+
+    /*
+     * erLhcoreClassChatEventDispatcher::getInstance()->dispatch('chat.incoming_dynamic_array', array('incoming_chat' => $this, 'dynamic_array' => & $chat_dynamic_array));
+    */
+    public static function incomingChatDynamicArray($params)
+    {
+        /*
+            AccessKey {{args.chat.incoming_chat.incoming.attributes.access_key}}
+            AccessKey {{args.chat.incoming_chat.incoming_dynamic_array.access_key}}
+        */
+        if ($params['incoming_chat']->incoming->scope == 'messagebird')
+        {
+            if (isset($params['incoming_chat']->chat->chat_variables_array['iwh_field_2']) && $params['incoming_chat']->chat->chat_variables_array['iwh_field_2'] != '') {
+                $account = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdAccount::findOne(['filter' => ['channel_id' => $params['incoming_chat']->chat->chat_variables_array['iwh_field_2']]]);
+
+                if (is_object($account) && $account->access_key != '') {
+                    $params['dynamic_array']['access_key'] = $account->access_key;
+                }
+            }
+            if (!isset($params['dynamic_array']['access_key'])) {
+                $params['dynamic_array']['access_key'] = $params['incoming_chat']->incoming->attributes['access_key'];
+            }
+        }
     }
 
     /*
@@ -28,7 +53,6 @@ class erLhcoreClassExtensionMessagebird
             $params['data']['message']['platform'] == 'whatsapp'
         ) {
             $messageBird = LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::findOne(['sort' => 'id DESC', 'filtergt' => ['created_at' => (time() - 24 * 3600)], 'filter' => ['conversation_id' => $params['data']['message']['conversationId']]]);
-
             if (is_object($messageBird) && $messageBird->dep_id > 0) {
 
                 // Save template only if it was not assigned to any chat yet
@@ -49,7 +73,11 @@ class erLhcoreClassExtensionMessagebird
                 // Update message bird
                 $messageBird->chat_id = $params['chat']->id;
                 $messageBird->updateThis(['update' => ['chat_id']]);
+            } elseif (($whatsappAccount = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdAccount::findOne(['filter' => ['channel_id' => $params['data']['message']['channelId']]])) !== false && $whatsappAccount->dep_id > 0) {
+                $params['chat']->dep_id = $whatsappAccount->dep_id;
+                $params['chat']->updateThis(['update' => ['dep_id']]);
             }
+
         } else if ($params['webhook']->scope == 'messagebirdsms' && isset($params['data']['recipient'])) {
 
             $phone = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdPhoneNumber::findOne(['filter' => ['phone' => $params['data']['recipient']]]);

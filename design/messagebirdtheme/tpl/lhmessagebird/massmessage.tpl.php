@@ -32,10 +32,21 @@
             </div>
 
             <div class="form-group">
+                <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','Business account');?>, <small><i><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','you can set a custom business account');?></i></small></label>
+                <?php echo erLhcoreClassRenderHelper::renderCombobox( array (
+                    'input_name'     => 'business_account_id',
+                    'optional_field' => erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','Default configuration'),
+                    'selected_id'    => $send->business_account_id,
+                    'css_class'      => 'form-control form-control-sm',
+                    'list_function'  => '\LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdAccount::getList'
+                )); ?>
+            </div>
+
+            <div class="form-group">
                 <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Template');?>*</label>
                 <select name="template" class="form-control form-control-sm" id="template-to-send">
                     <option value=""><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Choose a template');?></option>
-                    <?php foreach (LiveHelperChatExtension\messagebird\providers\MessageBirdLiveHelperChat::getInstance()->getTemplates()['items'] as $template) : if (\LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdTemplateDisabled::getCount(['filter' => ['id' => $template['id']]]) > 0) {continue;}?>
+                    <?php foreach ($templates['items'] as $template) : if (\LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdTemplateDisabled::getCount(['filter' => ['id' => $template['id']]]) > 0) {continue;}?>
                         <option <?php if ($send->template == $template['name']) : ?>selected="selected"<?php endif;?> value="<?php echo htmlspecialchars($template['name'] . '||' . $template['language'])?>"><?php echo htmlspecialchars($template['name'] . ' [' . $template['language'] . ']')?></option>
                     <?php endforeach; ?>
                 </select>
@@ -48,6 +59,7 @@
 
             <script>
                 var messageFieldsValues = <?php echo json_encode($send->message_variables_array);?>;
+                var businessAccountId = <?php echo (int)$send->business_account_id?>;
             </script>
 
             <p><small><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','First row in CSV is skipped. Columns order');?> - </small>

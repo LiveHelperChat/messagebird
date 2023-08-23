@@ -173,8 +173,3 @@ return array(
     'filterAttributes' => $fieldsSearch,
     'sortAttributes'   => $fieldSortAttr
 );
-
-return array(
-    'filterAttributes' => $fieldsSearch,
-    'sortAttributes'   => $fieldSortAttr
-);
