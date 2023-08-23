@@ -3,10 +3,10 @@
 <form action="" method="get">
 
     <div class="form-group">
-        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','Business account');?></label>
+        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Business account');?></label>
         <?php echo erLhcoreClassRenderHelper::renderCombobox( array (
             'input_name'     => 'business_account_id',
-            'optional_field' => erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','Default configuration'),
+            'optional_field' => erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Default configuration'),
             'selected_id'    => $input->business_account_id,
             'css_class'      => 'form-control form-control-sm',
             'list_function'  => '\LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdAccount::getList'

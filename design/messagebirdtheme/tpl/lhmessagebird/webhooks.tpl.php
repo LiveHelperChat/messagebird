@@ -65,10 +65,10 @@
     <h5>Set webhook</h5>
 
     <div class="form-group">
-        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','Business account');?></label>
+        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Business account');?></label>
         <?php echo erLhcoreClassRenderHelper::renderCombobox( array (
             'input_name'     => 'business_account_id',
-            'optional_field' => erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','Default configuration'),
+            'optional_field' => erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Default configuration'),
             'selected_id'    => 0,
             'css_class'      => 'form-control form-control-sm',
             'list_function'  => '\LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdAccount::getList'
@@ -76,7 +76,7 @@
     </div>
 
     <div class="form-group">
-        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','Incoming webhook, look for MessageBirdWhatsApp');?></label>
+        <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Incoming webhook, look for MessageBirdWhatsApp');?></label>
         <?php echo erLhcoreClassRenderHelper::renderCombobox( array (
             'input_name'     => 'webhook_id',
             'selected_id'    => 0,

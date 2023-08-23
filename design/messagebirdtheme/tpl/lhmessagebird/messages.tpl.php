@@ -28,7 +28,7 @@
                     <?php if (is_object($item->business_account)) : ?>
                         <?php echo htmlspecialchars((string)$item->business_account)?>
                     <?php else : ?>
-                        <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','Default');?>
+                        <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Default');?>
                     <?php endif; ?>
                 </td>
                 <td>

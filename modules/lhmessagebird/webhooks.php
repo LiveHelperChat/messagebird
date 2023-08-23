@@ -51,9 +51,9 @@ $tpl->set('instance', $instance);
 
 $Result['content'] = $tpl->fetch();
 $Result['path'] = array(
-    array('url' => erLhcoreClassDesign::baseurl('messagebird/index'), 'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','MessageBird')),
+    array('url' => erLhcoreClassDesign::baseurl('messagebird/index'), 'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','MessageBird')),
     array(
-        'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger', 'WhatsApp Webhooks')
+        'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module', 'WhatsApp Webhooks')
     )
 );
 

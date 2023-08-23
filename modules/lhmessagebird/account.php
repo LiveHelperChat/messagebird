@@ -25,7 +25,7 @@ $filterWithoutSort = $filterParams['filter'];
 unset($filterWithoutSort['sort']);
 
 if (empty($filterWithoutSort) && method_exists('\LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdAccount','estimateRows')) {
-    $rowsNumber = ($rowsNumber = \LiveHelperChatExtension\fbmessenger\providers\erLhcoreClassModelMessageFBWhatsAppAccount::estimateRows()) && $rowsNumber > 10000 ? $rowsNumber : null;
+    $rowsNumber = ($rowsNumber = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageFBWhatsAppAccount::estimateRows()) && $rowsNumber > 10000 ? $rowsNumber : null;
 }
 
 $pages = new lhPaginator();
@@ -46,9 +46,9 @@ $tpl->set('inputAppend',$append);
 
 $Result['content'] = $tpl->fetch();
 $Result['path'] = array(
-    array('url' => erLhcoreClassDesign::baseurl('messagebird/index'), 'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','MessageBird')),
+    array('url' => erLhcoreClassDesign::baseurl('messagebird/index'), 'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','MessageBird')),
     array(
-        'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger', 'WhatsApp Accounts')
+        'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module', 'WhatsApp Accounts')
     )
 );
 

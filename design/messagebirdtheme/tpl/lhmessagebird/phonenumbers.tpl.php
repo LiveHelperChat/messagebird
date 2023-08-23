@@ -37,4 +37,4 @@
     <?php endif;?>
 <?php endif; ?>
 
-<a href="<?php echo erLhcoreClassDesign::baseurl('messagebird/newphonenumber')?>" class="btn btn-sm btn-secondary"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','New');?></a>
+<a href="<?php echo erLhcoreClassDesign::baseurl('messagebird/newphonenumber')?>" class="btn btn-sm btn-secondary"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','New');?></a>

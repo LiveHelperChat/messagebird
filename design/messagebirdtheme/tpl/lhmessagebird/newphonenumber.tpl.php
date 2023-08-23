@@ -1,4 +1,4 @@
-<h1><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','New');?></h1>
+<h1><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','New');?></h1>
 
 <?php if (isset($errors)) : ?>
     <?php include(erLhcoreClassDesign::designtpl('lhkernel/validation_error.tpl.php'));?>

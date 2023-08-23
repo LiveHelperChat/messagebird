@@ -1,4 +1,4 @@
-<h1><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','Edit Business Account');?></h1>
+<h1><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Edit Business Account');?></h1>
 
 <?php if (isset($errors)) : ?>
     <?php include(erLhcoreClassDesign::designtpl('lhkernel/validation_error.tpl.php'));?>

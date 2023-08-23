@@ -37,10 +37,10 @@
             </div>
 
             <div class="form-group">
-                <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','Business account');?>, <small><i><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','you can set a custom business account');?></i></small></label>
+                <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Business account');?>, <small><i><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','you can set a custom business account');?></i></small></label>
                 <?php echo erLhcoreClassRenderHelper::renderCombobox( array (
                     'input_name'     => 'business_account_id',
-                    'optional_field' => erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','Default configuration'),
+                    'optional_field' => erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','Default configuration'),
                     'selected_id'    => $send->business_account_id,
                     'css_class'      => 'form-control form-control-sm',
                     'list_function'  => '\LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdAccount::getList'

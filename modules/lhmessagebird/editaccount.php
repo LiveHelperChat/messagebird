@@ -33,13 +33,13 @@ $Result['content'] = $tpl->fetch();
 $Result['path'] = array(
     array(
         'url' => erLhcoreClassDesign::baseurl('messagebird/index'),
-        'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','MessageBird')),
+        'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module','MessageBird')),
     array(
         'url' =>erLhcoreClassDesign::baseurl('messagebird/account'),
-        'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger', 'WhatsApp Accounts')
+        'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module', 'WhatsApp Accounts')
     ),
     array(
-        'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger', 'Edit WhatsApp Accounts')
+        'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('messagebird/module', 'Edit WhatsApp Accounts')
     )
 );
 
