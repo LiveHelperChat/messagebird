@@ -52,6 +52,7 @@ class erLhcoreClassExtensionMessagebird
             isset($params['data']['message']['platform']) &&
             $params['data']['message']['platform'] == 'whatsapp'
         ) {
+            $departmentChanges = false;
             $messageBird = LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::findOne(['sort' => 'id DESC', 'filtergt' => ['created_at' => (time() - 24 * 3600)], 'filter' => ['conversation_id' => $params['data']['message']['conversationId']]]);
             if (is_object($messageBird) && $messageBird->dep_id > 0) {
 
@@ -60,6 +61,7 @@ class erLhcoreClassExtensionMessagebird
                     // Chat
                     $params['chat']->dep_id = $messageBird->dep_id;
                     $params['chat']->updateThis(['update' => ['dep_id']]);
+                    $departmentChanges = true;
 
                     // Save template message first before saving initial response in the lhc core
                     $msg = new erLhcoreClassModelmsg();
@@ -73,7 +75,9 @@ class erLhcoreClassExtensionMessagebird
                 // Update message bird
                 $messageBird->chat_id = $params['chat']->id;
                 $messageBird->updateThis(['update' => ['chat_id']]);
-            } elseif (($whatsappAccount = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdAccount::findOne(['filter' => ['channel_id' => $params['data']['message']['channelId']]])) !== false && $whatsappAccount->dep_id > 0) {
+            }
+
+            if ($departmentChanges === false && ($whatsappAccount = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdAccount::findOne(['filter' => ['channel_id' => $params['data']['message']['channelId']]])) !== false && $whatsappAccount->dep_id > 0) {
                 $params['chat']->dep_id = $whatsappAccount->dep_id;
                 $params['chat']->updateThis(['update' => ['dep_id']]);
             }
