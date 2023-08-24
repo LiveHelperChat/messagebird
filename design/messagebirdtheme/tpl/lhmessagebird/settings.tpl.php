@@ -46,6 +46,11 @@
         <input type="text" name="access_key_sms" class="form-control form-control-sm" value="<?php isset($mb_options['access_key_sms']) ? print htmlspecialchars($mb_options['access_key_sms']) : ''?>" />
     </div>
 
+    <?php $incomingWebhook = erLhcoreClassModelChatIncomingWebhook::findOne(array('filter' => array('name' => 'MessageBirdWhatsApp')));
+    if (is_object($incomingWebhook)) : ?>
+        <div class="text-muted"><a href="<?php echo erLhcoreClassDesign::baseurl('webhooks/editincoming')?>/<?php echo $incomingWebhook->id?>"><span class="badge bg-info"><?php echo htmlspecialchars($incomingWebhook->name)?></span></a> Change default department</div>
+    <?php endif; ?>
+
     <hr>
 
     <div class="form-group">

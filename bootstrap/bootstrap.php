@@ -53,7 +53,18 @@ class erLhcoreClassExtensionMessagebird
             $params['data']['message']['platform'] == 'whatsapp'
         ) {
             $departmentChanges = false;
-            $messageBird = LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::findOne(['sort' => 'id DESC', 'filtergt' => ['created_at' => (time() - 24 * 3600)], 'filter' => ['conversation_id' => $params['data']['message']['conversationId']]]);
+
+            $business_account_id = 0;
+
+            if (($whatsappAccount = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdAccount::findOne(['filter' => ['channel_id' => $params['data']['message']['channelId']]])) !== false) {
+                $business_account_id = $whatsappAccount->id;
+            }
+
+            $messageBird = LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::findOne(['sort' => 'id DESC', 'filtergt' => ['created_at' => (time() - 24 * 3600)], 'filter' => [
+                'business_account_id' => $business_account_id,
+                'conversation_id' => $params['data']['message']['conversationId']
+            ]]);
+
             if (is_object($messageBird) && $messageBird->dep_id > 0) {
 
                 // Save template only if it was not assigned to any chat yet
@@ -77,7 +88,7 @@ class erLhcoreClassExtensionMessagebird
                 $messageBird->updateThis(['update' => ['chat_id']]);
             }
 
-            if ($departmentChanges === false && ($whatsappAccount = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdAccount::findOne(['filter' => ['channel_id' => $params['data']['message']['channelId']]])) !== false && $whatsappAccount->dep_id > 0) {
+            if ($departmentChanges === false && $whatsappAccount !== false && $whatsappAccount->dep_id > 0) {
                 $params['chat']->dep_id = $whatsappAccount->dep_id;
                 $params['chat']->updateThis(['update' => ['dep_id']]);
             }
@@ -135,11 +146,17 @@ class erLhcoreClassExtensionMessagebird
                 $messageBird->dep_id = $params['webhook']->dep_id;
                 $messageBird->message = $params['data']['message']['content']['hsm']['templateName'];
                 $messageBird->user_id = -1;
+                $messageBird->business_account_id = 0;
+
+                if (($whatsappAccount = \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdAccount::findOne(['filter' => ['channel_id' => $params['data']['message']['channelId']]])) !== false) {
+                    $messageBird->business_account_id = $whatsappAccount->id;
+                }
             }
 
             $statusMap = [
                 'pending' => LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_PENDING,
                 'sent' => LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_SENT,
+                'transmitted' => LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_SENT,
                 'delivered' => LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_DELIVERED,
                 'read' => LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_READ,
                 'rejected' => LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage::STATUS_REJECTED,
@@ -182,7 +199,7 @@ class erLhcoreClassExtensionMessagebird
                 if (is_object($incomingWebhook)) {
 
                     $presentChat = \erLhcoreClassModelChatIncoming::findOne(['sort' => '`id` DESC','filter' => [
-                        'chat_external_id' => $messageBird->conversation_id,
+                        'chat_external_id' => $messageBird->conversation_id . '__' . $params['data']['message']['channelId'],
                         'incoming_id' => $incomingWebhook->id]]);
 
                     if (is_object($presentChat)) {
@@ -222,13 +239,16 @@ class erLhcoreClassExtensionMessagebird
             $params['data']['message']['platform'] == 'whatsapp' &&
             $params['data']['type'] == 'message.updated') {
 
-            $incomingChat = erLhcoreClassModelChatIncoming::findOne(array('filter' => array('chat_external_id' => $params['data']['message']['conversationId'])));
+            $incomingChat = erLhcoreClassModelChatIncoming::findOne(array('filter' => array(
+                'chat_external_id' => $params['data']['message']['conversationId'] . '__' . $params['data']['message']['channelId']
+            )));
 
             // Chat was found, now we need to find exact message
             if ($incomingChat instanceof erLhcoreClassModelChatIncoming && is_object($incomingChat->chat)) {
                 $statusMap = [
                     'pending' => erLhcoreClassModelmsg::STATUS_PENDING,
                     'sent' => erLhcoreClassModelmsg::STATUS_SENT,
+                    'transmitted' => erLhcoreClassModelmsg::STATUS_SENT,
                     'delivered' => erLhcoreClassModelmsg::STATUS_DELIVERED,
                     'read' =>  erLhcoreClassModelmsg::STATUS_READ,
                     'rejected' =>  erLhcoreClassModelmsg::STATUS_REJECTED
