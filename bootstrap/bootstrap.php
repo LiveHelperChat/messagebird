@@ -234,6 +234,30 @@ class erLhcoreClassExtensionMessagebird
             exit;
             
         } else if (isset($params['data']['message']['id']) &&
+            isset($params['data']['error']['code']) &&
+            $params['data']['message']['status'] == 'failed' &&
+            $params['data']['type'] == 'message.status' && isset($_GET['chat_id']) && ($chat = erLhcoreClassModelChat::fetch($_GET['chat_id'])) !== false) {
+
+            $msg = erLhcoreClassModelmsg::findOne(['filter' => ['chat_id' => $chat->id], 'customfilter' => ['`meta_msg` != \'\' AND JSON_EXTRACT(meta_msg,\'$.iwh_msg_id\') = ' . ezcDbInstance::get()->quote($params['data']['message']['id'])]]);
+
+            if (is_object($msg) && $msg->del_st != erLhcoreClassModelmsg::STATUS_READ) {
+                $msg->del_st = erLhcoreClassModelmsg::STATUS_REJECTED;
+                $meta_msg = $msg->meta_msg_array;
+                $meta_msg['content']['warning']['content'] = $params['data']['error']['description'];
+                $msg->meta_msg = json_encode($meta_msg);
+
+                $msg->updateThis(['update' => ['del_st','meta_msg']]);
+
+                $chat->operation_admin .= "lhinst.updateMessageRowAdmin({$msg->chat_id},{$msg->id});";
+                $chat->updateThis(['update' => ['operation_admin']]);
+
+                // NodeJS to update message delivery status
+                erLhcoreClassChatEventDispatcher::getInstance()->dispatch('chat.message_updated', array('msg' => & $msg, 'chat' => & $chat));
+            }
+
+           exit;
+            
+        } else if (isset($params['data']['message']['id']) &&
             isset($params['data']['message']['platform']) &&
             isset($params['data']['message']['type']) &&
             $params['data']['message']['platform'] == 'whatsapp' &&
