@@ -3,6 +3,7 @@
 /**
  * Direct integration with Mattermost
  * */
+#[\AllowDynamicProperties]
 class erLhcoreClassExtensionMessagebird
 {
     private static $persistentSession;

@@ -1,7 +1,7 @@
 <?php
 
 namespace LiveHelperChatExtension\messagebird\providers {
-
+    #[\AllowDynamicProperties]
     class MessageBirdLiveHelperChatValidator {
         public static function validatePhone(& $item) {
             $definition = array(

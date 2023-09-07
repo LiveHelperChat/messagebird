@@ -1,7 +1,7 @@
 <?php
 
 namespace LiveHelperChatExtension\messagebird\providers;
-
+#[\AllowDynamicProperties]
 class erLhcoreClassModelMessageBirdPhoneNumber
 {
     use \erLhcoreClassDBTrait;
