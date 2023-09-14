@@ -83,6 +83,10 @@ if (isset($_POST['UploadFileAction'])) {
         {
             while (($row = fgetcsv($handle, 10000, ",")) !== FALSE)
             {
+                array_walk($row, function(& $item) {
+                    $item = preg_replace('/[\x{200B}-\x{200D}\x{FEFF}]/u', '',trim($item));
+                });
+
                 if(!$header) {
                     $header = $row;
                 } else {
@@ -104,7 +108,7 @@ if (isset($_POST['UploadFileAction'])) {
         );
 
         if ($canned === $header) {
-
+            
             foreach ($data as $item) {
                 $messagePrepared = new \LiveHelperChatExtension\messagebird\providers\erLhcoreClassModelMessageBirdMessage();
                 $messagePrepared->user_id = $currentUser->getUserID();
